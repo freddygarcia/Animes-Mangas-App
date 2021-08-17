@@ -1,14 +1,17 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeScreen from '../screens/home.screen';
 
-const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export const AppNavigator = (): React.ReactElement => (
     <NavigationContainer>
-        <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeScreen} />
-        </Stack.Navigator>
+        <Drawer.Navigator>
+            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Animes" component={HomeScreen} />
+            <Drawer.Screen name="Manga" component={HomeScreen} />
+            <Drawer.Screen name="Favorites" component={HomeScreen} />
+        </Drawer.Navigator>
     </NavigationContainer>
 );
