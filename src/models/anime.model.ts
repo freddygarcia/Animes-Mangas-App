@@ -16,9 +16,18 @@ export interface Anime {
     titles: {
         canonical: string;
     }
+    categories: {
+        nodes: Category[]
+    }
     posterImage: {
         original: {
             url: string;
         }
+    }
+}
+
+export interface Category {
+    title : {
+        en: string;
     }
 }

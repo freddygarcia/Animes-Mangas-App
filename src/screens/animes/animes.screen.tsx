@@ -10,11 +10,13 @@ import { initialState, reducer } from '../../reducers/anime.reducers';
 import { ImageOverlay } from '../../components/ImageOverlay';
 
 const AnimesScreen = () => {
+
+    const INITIAL_LOAD = 10;
     const styles = useStyleSheet(theme);
     const [state, dispatch] = useReducer(reducer, initialState);
     const { data, loading }: AnimeQuery = useQuery(GetAllAnimes, {
         variables: {
-            first: 13
+            first: INITIAL_LOAD
         }
     });
 
@@ -24,15 +26,26 @@ const AnimesScreen = () => {
         return <Loading />
     }
 
-    const renderItem = (info: ListRenderItemInfo<Anime>): React.ReactElement => (
+    const renderItem = (itemInfo: ListRenderItemInfo<Anime>): React.ReactElement => (
         <Card>
             <ImageOverlay
                 style={styles.poster}
-                source={{ uri: info.item.posterImage.original.url }}>
+                source={{ uri: itemInfo.item.posterImage.original.url }}>
+
                 <Text
-                    category='h4'
+                    category='h2'
                     status='control'>
-                    {info.item.titles.canonical}
+                    {itemInfo.item.titles.canonical}
+                </Text>
+                <Text
+                    category='s1'
+                    status='control'>
+                    {itemInfo.item.categories.nodes.map(c => c.title.en).join(', ')}
+                </Text>
+                <Text
+                    category='s1'
+                    status='control'>
+                    {itemInfo.item.episodeCount} Epidodes
                 </Text>
             </ImageOverlay>
         </Card>
