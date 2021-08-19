@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { Anime } from "../models/anime.model"
-import { ApiResponse } from "../models/api.response"
+import { Anime, ApiResponse } from "../models/anime.model"
 
 export interface State {
     loading: boolean
@@ -30,11 +29,13 @@ export const animeSlice = createSlice({
             state.endCursor = state.internalCursor;
         },
         saveAnime: (state, action) => {
-            state.anime = action.payload;
+            state.anime = new Anime(action.payload);
         },
         saveAnimes: (state, action) => {
             const payload: ApiResponse = action.payload;
-            state.animes = [...state.animes, ...payload.rows.nodes];
+            const animes = payload.rows.nodes.map(node => new Anime(node));
+
+            state.animes = [...state.animes, ...animes];
             state.endCursor = null;
             state.internalCursor = payload.rows.pageInfo.endCursor;
             state.loading = false;

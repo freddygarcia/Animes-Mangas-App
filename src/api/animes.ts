@@ -13,7 +13,7 @@ query GetAnimes($first: Int, $after: String){
       averageRating
       episodeCount
       totalLength
-       categories (first:2){
+       categories (first:3){
          nodes{
            title
          }
@@ -37,9 +37,11 @@ query GetAnime($id: ID!) {
   findAnimeById(id:$id) {
       averageRating
       description
+      startDate
       youtubeTrailerVideoId
+      episodeLength
       episodeCount
-       categories (first:2){
+       categories (first:3){
          nodes{
            title
          }
@@ -53,4 +55,5 @@ query GetAnime($id: ID!) {
         canonical 
       }
   }
-}`
+}
+`
