@@ -25,6 +25,11 @@ export const animeSlice = createSlice({
     name: 'counter',
     initialState: initialState,
     reducers: {
+        reset: (state) => {
+            state.animes = [];
+            state.endCursor = null;
+            state.internalCursor = null;
+        },
         loadMore: (state) => {
             state.endCursor = state.internalCursor;
         },
@@ -44,6 +49,6 @@ export const animeSlice = createSlice({
     }
 })
 
-export const { saveAnimes, loadMore, saveAnime } = animeSlice.actions
+export const { saveAnimes, loadMore, saveAnime, reset } = animeSlice.actions
 
 export default animeSlice.reducer;

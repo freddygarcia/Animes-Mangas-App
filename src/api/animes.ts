@@ -13,7 +13,7 @@ query GetAnimes($first: Int, $after: String){
       averageRating
       episodeCount
       totalLength
-       categories (first:3){
+       categories (first:2){
          nodes{
            title
          }
