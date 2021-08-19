@@ -9,6 +9,7 @@ query Animes($first: Int, $after: String){
       endCursor
     }
     nodes{
+      id
       averageRating
       episodeCount
       totalLength

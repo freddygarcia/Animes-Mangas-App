@@ -1,4 +1,5 @@
 export interface Anime {
+    id: string;
     episodeCount: number;
     averageRating: number;
     titles: {

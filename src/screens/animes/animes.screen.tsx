@@ -2,19 +2,27 @@ import React from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { Card, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 import { Anime } from '../../models/anime.model';
-import { useReducer } from 'react';
 import { useQuery } from '@apollo/client'
 import { GetAllAnimes } from '../../api/animes';
-import { actionCreator, initialState, reducer } from '../../reducers/anime.reducers';
+import { load, loadMore, State } from '../../reducers/anime.reducers';
 import { ImageOverlay } from '../../components/ImageOverlay';
 import { useEffect } from 'react';
 import { Query } from '../../models/api.response';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../../app/store';
 
-const AnimesScreen = () => {
 
+
+interface AnimesScreenProps {
+    navigation: NativeStackNavigationProp<{}>;
+}
+
+const AnimesScreen = ({ navigation }: AnimesScreenProps) => {
     const RETRIEVE_QTY = 10;
     const styles = useStyleSheet(theme);
-    const [{ animes, endCursor }, dispatch] = useReducer(reducer, initialState);
+    const { animes, endCursor } = useSelector<RootState>(state => state.animes) as State;
+    const dispatch = useDispatch();
 
     const { data, loading }: Query = useQuery(GetAllAnimes, {
         variables: {
@@ -22,20 +30,26 @@ const AnimesScreen = () => {
             after: endCursor
         }
     });
-    
+
     const loadAnimes = () => {
         if (loading || data === undefined) return;
-        dispatch(actionCreator.load(data));
+        dispatch(load(data));
     }
 
-    const loadMore = () => dispatch(actionCreator.loadMore());
+    const loadMoreAnimes: any = () => dispatch(loadMore());
+
+    const onItemPress = (anime: Anime) => () => {
+        navigation.push('AnimeDetail', { id: anime.id });
+    };
 
     useEffect(() => {
         loadAnimes();
     }, [loading])
 
     const renderItem = (itemInfo: ListRenderItemInfo<Anime>): React.ReactElement => (
-        <Card>
+        <Card
+            onPress={onItemPress(itemInfo.item)}
+        >
             <ImageOverlay
                 style={styles.poster}
                 source={{ uri: itemInfo.item.posterImage.original.url }}>
@@ -62,7 +76,7 @@ const AnimesScreen = () => {
 
     return (
         <List
-            onEndReached={loadMore}
+            onEndReached={loadMoreAnimes}
             data={animes}
             renderItem={renderItem}
         />

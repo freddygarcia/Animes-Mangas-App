@@ -1,7 +1,7 @@
+import { createSlice } from '@reduxjs/toolkit'
+
 import { Anime } from "../models/anime.model"
 import { ApiResponse } from "../models/api.response"
-
-type Action = { type: 'LOADING' } | { type: 'SUCCESS', payload: ApiResponse } | { type: 'LOAD_MORE' }
 
 export interface State {
     loading: boolean
@@ -11,37 +11,33 @@ export interface State {
     endCursor: string | null
 }
 
-export const actionCreator = {
-    loading: (): Action => ({ type: 'LOADING' }),
-    loadMore: (): Action => ({ type: 'LOAD_MORE' }),
-    load: (animes: ApiResponse): Action => ({
-        type: 'SUCCESS',
-        payload: animes,
-    }),
-}
-
-export const initialState = {
+export const initialState: State = {
     loading: false,
     error: false,
-    animes: [],
+    animes: [] as Anime[],
     internalCursor: null,
     endCursor: null,
 }
 
-export function reducer(state: State, action: Action): State {
-    switch (action.type) {
-        case 'LOADING':
-            return { ...state, loading: true, error: false }
-        case 'SUCCESS':
-            return {
-                ...state,
-                loading: false,
-                error: false,
-                animes: [...state.animes, ...action.payload.rows.nodes],
-                endCursor: null,
-                internalCursor: action.payload.rows.pageInfo.endCursor,
-            }
-        case 'LOAD_MORE':
-            return { ...state, endCursor: state.internalCursor }
+
+export const animeSlice = createSlice({
+    name: 'counter',
+    initialState: initialState,
+    reducers: {
+        loadMore: (state) => {
+            state.endCursor = state.internalCursor;
+        },
+        load: (state, action) => {
+            const payload: ApiResponse = action.payload;
+            state.animes = [...state.animes, ...payload.rows.nodes];
+            state.endCursor = null;
+            state.internalCursor = payload.rows.pageInfo.endCursor;
+            state.loading = false;
+            state.error = false;
+        }
     }
-}
+})
+
+export const { load, loadMore } = animeSlice.actions
+
+export default animeSlice.reducer;
