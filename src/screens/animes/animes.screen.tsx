@@ -1,30 +1,38 @@
 import React from 'react';
 import { ListRenderItemInfo } from 'react-native';
 import { Card, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
-import { Anime, AnimeQuery } from '../../models/anime.model';
+import { Anime } from '../../models/anime.model';
 import { useReducer } from 'react';
 import { useQuery } from '@apollo/client'
 import { GetAllAnimes } from '../../api/animes';
-import Loading from '../../components/Loading';
-import { initialState, reducer } from '../../reducers/anime.reducers';
+import { actionCreator, initialState, reducer } from '../../reducers/anime.reducers';
 import { ImageOverlay } from '../../components/ImageOverlay';
+import { useEffect } from 'react';
+import { Query } from '../../models/api.response';
 
 const AnimesScreen = () => {
 
-    const INITIAL_LOAD = 10;
+    const RETRIEVE_QTY = 10;
     const styles = useStyleSheet(theme);
-    const [state, dispatch] = useReducer(reducer, initialState);
-    const { data, loading }: AnimeQuery = useQuery(GetAllAnimes, {
+    const [{ animes, endCursor }, dispatch] = useReducer(reducer, initialState);
+
+    const { data, loading }: Query = useQuery(GetAllAnimes, {
         variables: {
-            first: INITIAL_LOAD
+            first: RETRIEVE_QTY,
+            after: endCursor
         }
     });
-
-    const animes = (data && data.anime.nodes) || [];
-
-    if (loading) {
-        return <Loading />
+    
+    const loadAnimes = () => {
+        if (loading || data === undefined) return;
+        dispatch(actionCreator.load(data));
     }
+
+    const loadMore = () => dispatch(actionCreator.loadMore());
+
+    useEffect(() => {
+        loadAnimes();
+    }, [loading])
 
     const renderItem = (itemInfo: ListRenderItemInfo<Anime>): React.ReactElement => (
         <Card>
@@ -54,6 +62,7 @@ const AnimesScreen = () => {
 
     return (
         <List
+            onEndReached={loadMore}
             data={animes}
             renderItem={renderItem}
         />

@@ -1,20 +1,22 @@
 import { Anime } from "../models/anime.model"
+import { ApiResponse } from "../models/api.response"
 
-type Action = { type : 'LOADING' } | { type : 'SUCCESS', payload : Anime[] } | { type : 'FAILURE', payload : any }
+type Action = { type: 'LOADING' } | { type: 'SUCCESS', payload: ApiResponse } | { type: 'LOAD_MORE' }
 
 export interface State {
     loading: boolean
     error: boolean
     animes: Anime[]
-    nextPage: number
+    internalCursor: string | null
+    endCursor: string | null
 }
 
 export const actionCreator = {
-    loading: () => ({ type: 'LOADING' }),
-    failure: () => ({ type: 'FAILURE' }),
-    success: (animes: Anime[], page: number) => ({
+    loading: (): Action => ({ type: 'LOADING' }),
+    loadMore: (): Action => ({ type: 'LOAD_MORE' }),
+    load: (animes: ApiResponse): Action => ({
         type: 'SUCCESS',
-        payload: { animes, page },
+        payload: animes,
     }),
 }
 
@@ -22,7 +24,8 @@ export const initialState = {
     loading: false,
     error: false,
     animes: [],
-    nextPage: 1,
+    internalCursor: null,
+    endCursor: null,
 }
 
 export function reducer(state: State, action: Action): State {
@@ -34,10 +37,11 @@ export function reducer(state: State, action: Action): State {
                 ...state,
                 loading: false,
                 error: false,
-                animes: [...state.animes, ...action.payload],
-                nextPage: state.nextPage + 1,
+                animes: [...state.animes, ...action.payload.rows.nodes],
+                endCursor: null,
+                internalCursor: action.payload.rows.pageInfo.endCursor,
             }
-        case 'FAILURE':
-            return { ...state, loading: false, error: true }
+        case 'LOAD_MORE':
+            return { ...state, endCursor: state.internalCursor }
     }
 }
