@@ -1,27 +1,30 @@
 import React from 'react';
-import { ListRenderItemInfo } from 'react-native';
-import { Card, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
-import { Anime } from '../../models/anime.model';
+import { connect } from 'react-redux';
 import { useQuery } from '@apollo/client'
-import { GetAllAnimes } from '../../api/animes';
-import { load, loadMore, State } from '../../reducers/anime.reducers';
-import { ImageOverlay } from '../../components/ImageOverlay';
-import { useEffect } from 'react';
-import { Query } from '../../models/api.response';
+import { useDispatch } from 'react-redux'
+import { ListRenderItemInfo } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useSelector, useDispatch } from 'react-redux'
-import { RootState } from '../../app/store';
+import { Card, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 
+import { useEffect } from 'react';
+import { RootState } from '../../app/store';
+import { GetAllAnimes } from '../../api/animes';
+import { Anime } from '../../models/anime.model';
+import { Query } from '../../models/api.response';
+import { ImageOverlay } from '../../components/ImageOverlay';
+import { load, loadMore, State } from '../../reducers/anime.reducers';
 
 
 interface AnimesScreenProps {
     navigation: NativeStackNavigationProp<{}>;
+    state: State;
 }
 
-const AnimesScreen = ({ navigation }: AnimesScreenProps) => {
+const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
+
     const RETRIEVE_QTY = 10;
     const styles = useStyleSheet(theme);
-    const { animes, endCursor } = useSelector<RootState>(state => state.animes) as State;
+    const { animes, endCursor } = state;
     const dispatch = useDispatch();
 
     const { data, loading }: Query = useQuery(GetAllAnimes, {
@@ -94,5 +97,8 @@ const theme = StyleService.create({
     }
 });
 
+const MapStateToProps = (state: RootState) => ({
+    state: state.animes
+});
 
-export default AnimesScreen;
+export default connect(MapStateToProps)(AnimesScreen);
