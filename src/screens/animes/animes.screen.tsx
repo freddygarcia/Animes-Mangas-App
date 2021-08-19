@@ -11,7 +11,7 @@ import { RootState } from '../../app/store';
 import { GetAllAnimes } from '../../api/animes';
 import { Anime } from '../../models/anime.model';
 import { ImageOverlay } from '../../components/ImageOverlay';
-import { load, loadMore, State } from '../../reducers/anime.reducers';
+import { saveAnimes, loadMore, State } from '../../reducers/anime.reducers';
 
 
 interface AnimesScreenProps {
@@ -33,20 +33,13 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
         }
     });
 
-    const loadAnimes = () => {
-        if (loading || data === undefined) return;
-        dispatch(load(data));
-    }
+    const storeAnimes = () => !loading && data && dispatch(saveAnimes(data));
 
-    const loadMoreAnimes: any = () => dispatch(loadMore());
-
-    const onItemPress = (anime: Anime) => () => {
-        navigation.push('AnimeDetail', { id: anime.id });
-    };
-
-    useEffect(() => {
-        loadAnimes();
-    }, [loading])
+    const loadMoreAnimes = () => dispatch(loadMore());
+    
+    const onItemPress = (anime: Anime) => () => navigation.push('AnimeDetail', { id: anime.id });
+    
+    useEffect(storeAnimes, [loading])
 
     const renderItem = (itemInfo: ListRenderItemInfo<Anime>): React.ReactElement => (
         <Card

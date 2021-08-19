@@ -2,6 +2,10 @@ export interface Anime {
     id: string;
     episodeCount: number;
     averageRating: number;
+    description?: {
+        en: string
+    }
+    youtubeTrailerVideoId: number;
     titles: {
         canonical: string;
     }
@@ -16,7 +20,7 @@ export interface Anime {
 }
 
 export interface Category {
-    title : {
+    title: {
         en: string;
     }
 }

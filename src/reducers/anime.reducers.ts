@@ -7,6 +7,7 @@ export interface State {
     loading: boolean
     error: boolean
     animes: Anime[]
+    anime: Anime | null
     internalCursor: string | null
     endCursor: string | null
 }
@@ -14,6 +15,7 @@ export interface State {
 export const initialState: State = {
     loading: false,
     error: false,
+    anime: null,
     animes: [] as Anime[],
     internalCursor: null,
     endCursor: null,
@@ -27,7 +29,10 @@ export const animeSlice = createSlice({
         loadMore: (state) => {
             state.endCursor = state.internalCursor;
         },
-        load: (state, action) => {
+        saveAnime: (state, action) => {
+            state.anime = action.payload;
+        },
+        saveAnimes: (state, action) => {
             const payload: ApiResponse = action.payload;
             state.animes = [...state.animes, ...payload.rows.nodes];
             state.endCursor = null;
@@ -38,6 +43,6 @@ export const animeSlice = createSlice({
     }
 })
 
-export const { load, loadMore } = animeSlice.actions
+export const { saveAnimes, loadMore, saveAnime } = animeSlice.actions
 
 export default animeSlice.reducer;
