@@ -5,14 +5,17 @@ import { ApplicationProvider } from '@ui-kitten/components';
 import { ApolloProvider } from '@apollo/client'
 import { client } from '../api/client';
 import { Provider as ReduxProvider } from 'react-redux'
-import store from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from './store';
 
 const App = () => {
     return (
         <ApolloProvider client={client}>
             <ApplicationProvider {...eva} theme={eva.light}>
                 <ReduxProvider store={store}>
-                    <AppNavigator />
+                    <PersistGate loading={null} persistor={persistor}>
+                        <AppNavigator />
+                    </PersistGate>
                 </ReduxProvider>
             </ApplicationProvider>
         </ApolloProvider>

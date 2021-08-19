@@ -10,7 +10,6 @@ import { useEffect } from 'react';
 import { RootState } from '../../app/store';
 import { GetAllAnimes } from '../../api/animes';
 import { Anime } from '../../models/anime.model';
-import { Query } from '../../models/api.response';
 import { ImageOverlay } from '../../components/ImageOverlay';
 import { load, loadMore, State } from '../../reducers/anime.reducers';
 
@@ -27,7 +26,7 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
     const { animes, endCursor } = state;
     const dispatch = useDispatch();
 
-    const { data, loading }: Query = useQuery(GetAllAnimes, {
+    const { data, loading } = useQuery(GetAllAnimes, {
         variables: {
             first: RETRIEVE_QTY,
             after: endCursor
