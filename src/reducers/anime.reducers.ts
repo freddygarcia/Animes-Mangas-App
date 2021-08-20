@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { Anime } from "../models/anime.model"
-import { ApiResponse } from "../models/api.response"
+import { Anime, ApiResponse } from "../models/anime.model"
 
 export interface State {
     loading: boolean
     error: boolean
     animes: Anime[]
+    anime: Anime | null
     internalCursor: string | null
     endCursor: string | null
 }
@@ -14,6 +14,7 @@ export interface State {
 export const initialState: State = {
     loading: false,
     error: false,
+    anime: null,
     animes: [] as Anime[],
     internalCursor: null,
     endCursor: null,
@@ -24,12 +25,22 @@ export const animeSlice = createSlice({
     name: 'counter',
     initialState: initialState,
     reducers: {
+        reset: (state) => {
+            state.animes = [];
+            state.endCursor = null;
+            state.internalCursor = null;
+        },
         loadMore: (state) => {
             state.endCursor = state.internalCursor;
         },
-        load: (state, action) => {
+        saveAnime: (state, action) => {
+            state.anime = new Anime(action.payload);
+        },
+        saveAnimes: (state, action) => {
             const payload: ApiResponse = action.payload;
-            state.animes = [...state.animes, ...payload.rows.nodes];
+            const animes = payload.rows.nodes.map(node => new Anime(node));
+
+            state.animes = [...state.animes, ...animes];
             state.endCursor = null;
             state.internalCursor = payload.rows.pageInfo.endCursor;
             state.loading = false;
@@ -38,6 +49,6 @@ export const animeSlice = createSlice({
     }
 })
 
-export const { load, loadMore } = animeSlice.actions
+export const { saveAnimes, loadMore, saveAnime, reset } = animeSlice.actions
 
 export default animeSlice.reducer;

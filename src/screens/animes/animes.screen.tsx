@@ -2,16 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useQuery } from '@apollo/client'
 import { useDispatch } from 'react-redux'
-import { ListRenderItemInfo } from 'react-native';
+import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Card, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
+import { Button, Card, Icon, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
 
 import { useEffect } from 'react';
 import { RootState } from '../../app/store';
 import { GetAllAnimes } from '../../api/animes';
 import { Anime } from '../../models/anime.model';
 import { ImageOverlay } from '../../components/ImageOverlay';
-import { load, loadMore, State } from '../../reducers/anime.reducers';
+import { saveAnimes, loadMore, State, reset } from '../../reducers/anime.reducers';
 
 
 interface AnimesScreenProps {
@@ -22,7 +22,6 @@ interface AnimesScreenProps {
 const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
 
     const RETRIEVE_QTY = 10;
-    const styles = useStyleSheet(theme);
     const { animes, endCursor } = state;
     const dispatch = useDispatch();
 
@@ -33,48 +32,51 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
         }
     });
 
-    const loadAnimes = () => {
-        if (loading || data === undefined) return;
-        dispatch(load(data));
-    }
+    const storeAnimes = () => !loading && data && dispatch(saveAnimes(data));
 
-    const loadMoreAnimes: any = () => dispatch(loadMore());
+    const loadMoreAnimes = () => dispatch(loadMore());
 
-    const onItemPress = (anime: Anime) => () => {
-        navigation.push('AnimeDetail', { id: anime.id });
-    };
+    const onItemPress = (anime: Anime) => () => navigation.push('AnimeDetail', { id: anime.id });
+
+    useEffect(storeAnimes, [loading]);
 
     useEffect(() => {
-        loadAnimes();
-    }, [loading])
+        return () => dispatch(reset());
+    }, []);
 
     const renderItem = (itemInfo: ListRenderItemInfo<Anime>): React.ReactElement => (
         <Card
-            onPress={onItemPress(itemInfo.item)}
-        >
+            style={styles.item}
+            onPress={() => onItemPress(itemInfo.item)}>
             <ImageOverlay
-                style={styles.poster}
-                source={{ uri: itemInfo.item.posterImage.original.url }}>
+                style={styles.itemImage}
+                source={{ uri: itemInfo.item.poster }}>
+                <Text
+                    style={styles.itemTitle}
+                    category='h4'
+                    status='control'>
+                    {itemInfo.item.title}
+                </Text>
+                <View style={styles.itemFooter}>
+                    <Button
+                        style={styles.iconButton}
+                        appearance='ghost'
+                        status='control'
+                    >
+                        {itemInfo.item.categoryList?.join(', ')}
+                    </Button>
 
-                <Text
-                    category='h2'
-                    status='control'>
-                    {itemInfo.item.titles.canonical}
-                </Text>
-                <Text
-                    category='s1'
-                    status='control'>
-                    {itemInfo.item.categories.nodes.map(c => c.title.en).join(', ')}
-                </Text>
-                <Text
-                    category='s1'
-                    status='control'>
-                    {itemInfo.item.episodeCount} Epidodes
-                </Text>
+                    <Button
+                        style={[styles.iconButton, { position: 'absolute', right: 0 }]}
+                        appearance='ghost'
+                        status='control'
+                        accessoryLeft={<Icon name='heart-outline' />}
+                    > Save
+                    </Button>
+                </View>
             </ImageOverlay>
         </Card>
     );
-
 
     return (
         <List
@@ -86,14 +88,41 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
 }
 
 
-const theme = StyleService.create({
-    container: {
+const styles = StyleService.create({
+    list: {
         flex: 1,
     },
-    poster: {
+    listContent: {
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+    },
+    item: {
+        marginVertical: 8,
+        height: 220,
+    },
+    itemImage: {
+        ...StyleSheet.absoluteFillObject,
+        height: 220,
         paddingVertical: 24,
-        alignItems: 'center',
-    }
+        paddingHorizontal: 16,
+    },
+    itemTitle: {
+        zIndex: 1,
+    },
+    itemDescription: {
+        zIndex: 1,
+        marginVertical: 16,
+    },
+    itemFooter: {
+        width: '100%',
+        position: 'absolute',
+        flexDirection: 'row',
+        left: 8,
+        bottom: 8,
+    },
+    iconButton: {
+        paddingHorizontal: 0,
+    },
 });
 
 const MapStateToProps = (state: RootState) => ({

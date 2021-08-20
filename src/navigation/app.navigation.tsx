@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import AnimesScreen from '../screens/animes/animes.screen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AnimesScreen from '../screens/animes/animes.screen';
 import AnimeScreen from '../screens/animes/anime.screen';
 
 const Drawer = createDrawerNavigator();
