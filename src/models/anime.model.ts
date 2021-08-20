@@ -46,6 +46,10 @@ export class Anime {
         return parseInt((this.averageRating / 10).toFixed());
     }
 
+    get trailer(): string | null {
+        return this.youtubeTrailerVideoId ? `https://www.youtube.com/watch?v=${this.youtubeTrailerVideoId}` : null;
+    }
+
     get title(): string {
         return this.titles.canonical
     }
@@ -62,7 +66,13 @@ export class Anime {
         return new Date(this.startDate).getFullYear();
     }
 
+    get numberOfEpisodes(): string {
+        return this.episodeCount ? this.episodeCount.toString() : '?';
+    }
+
     get episodeDuration(): string {
+        if (this.episodeLength === null) return '?';
+
         if (this.episodeLength < 60) {
             return `${this.episodeLength} segs`;
         }

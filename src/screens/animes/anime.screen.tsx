@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Divider, Icon, Text, useStyleSheet } from "@ui-kitten/components";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { Image, ScrollView, StyleSheet, View, Linking, GestureResponderEvent } from "react-native";
 import { ImageOverlay } from "../../components/ImageOverlay";
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native'
@@ -83,6 +83,8 @@ const AnimeScreen = ({ navigation, route, anime }: AnimeScreenProps) => {
 
     const storeAnime = () => !loading && data?.findAnimeById && dispatch(saveAnime(data.findAnimeById));
 
+    const openYoutubeLink = (anime: Anime) => (ev: GestureResponderEvent) => Linking.openURL(anime.trailer);
+
     useEffect(storeAnime, [loading]);
 
     if (loading || anime === null || data?.findAnimeById === null) return <Loading />;
@@ -114,20 +116,34 @@ const AnimeScreen = ({ navigation, route, anime }: AnimeScreenProps) => {
             <DetailsList
                 style={styles.detailsList}
                 data={[{
-                    title: 'Episodes',
-                    description: anime.episodeCount
+                    title: 'Year',
+                    description: anime.year
                 },
                 {
                     title: 'Duration',
                     description: anime.episodeDuration
                 },
                 {
-                    title: 'Year',
-                    description: anime.year
-                }
-                ]}
+                    title: 'Episodes',
+                    description: anime.numberOfEpisodes
+                }]}
             />
             <Divider />
+            <View style={styles.interationButtonsSection}>
+                <Button
+                    size='giant'
+                    appearance={'ghost'}
+                    style={styles.buttonTransparentBackground}
+                    disabled={anime.trailer === null}
+                    onPress={openYoutubeLink(anime)}
+                    accessoryLeft={<Icon name='film-outline' />}
+                    status='basic' />
+                <Button
+                    size='giant'
+                    appearance={'ghost'}
+                    accessoryLeft={<Icon name='heart-outline' />}
+                    status='basic' />
+            </View>
             {Boolean(anime.description?.en) &&
                 <>
                     <Text
@@ -172,12 +188,11 @@ const themedStyles = StyleSheet.create({
     },
     rateBar: {
         alignSelf: 'center',
-        marginTop: 16,
-        marginBottom: 24,
+        marginVertical: 20
     },
     detailsList: {
         alignSelf: 'center',
-        marginVertical: 24,
+        marginVertical: 10,
     },
     descriptionLabel: {
         margin: 16,
@@ -185,6 +200,15 @@ const themedStyles = StyleSheet.create({
     sinopsisSection: {
         marginHorizontal: 16,
     },
+    interationButtonsSection: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        marginVertical: 10
+    },
+    buttonTransparentBackground: {
+        backgroundColor: 'rgba(0,0,0,0)'
+    }
 });
 
 
