@@ -22,7 +22,7 @@ export const initialState: State = {
 
 
 export const animeSlice = createSlice({
-    name: 'counter',
+    name: 'anime',
     initialState: initialState,
     reducers: {
         reset: (state) => {
@@ -38,9 +38,10 @@ export const animeSlice = createSlice({
         },
         saveAnimes: (state, action) => {
             const payload: ApiResponse = action.payload;
-            const animes = payload.rows.nodes.map(node => new Anime(node));
+            const newAnimes = payload.rows.nodes.map(node => new Anime(node));
+            // const storedAnimes = state.animes.map(node => node instanceof Anime ? node : new Anime(node))
 
-            state.animes = [...state.animes, ...animes];
+            state.animes = newAnimes; //  [...state.animes, ...payload.rows.nodes];
             state.endCursor = null;
             state.internalCursor = payload.rows.pageInfo.endCursor;
             state.loading = false;

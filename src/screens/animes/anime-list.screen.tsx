@@ -11,7 +11,7 @@ import { RootState } from '../../app/store';
 import { GetAllAnimes } from '../../api/animes';
 import { Anime } from '../../models/anime.model';
 import { ImageOverlay } from '../../components/ImageOverlay';
-import { saveAnimes, loadMore, State, reset } from '../../reducers/anime.reducers';
+import { saveAnimes, loadMore, State, reset } from '../../reducers/anime.reducer';
 
 
 interface AnimesScreenProps {
@@ -22,7 +22,7 @@ interface AnimesScreenProps {
 const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
 
     const RETRIEVE_QTY = 10;
-    const { animes, endCursor } = state;
+    const { animes, endCursor, internalCursor } = state;
     const dispatch = useDispatch();
 
     const { data, loading } = useQuery(GetAllAnimes, {
@@ -47,7 +47,7 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
     const renderItem = (itemInfo: ListRenderItemInfo<Anime>): React.ReactElement => (
         <Card
             style={styles.item}
-            onPress={() => onItemPress(itemInfo.item)}>
+            onPress={onItemPress(itemInfo.item)}>
             <ImageOverlay
                 style={styles.itemImage}
                 source={{ uri: itemInfo.item.poster }}>
@@ -78,11 +78,13 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
         </Card>
     );
 
+    const memo = React.useMemo(() => renderItem, [animes]);
+
     return (
         <List
             onEndReached={loadMoreAnimes}
             data={animes}
-            renderItem={renderItem}
+            renderItem={memo}
         />
     );
 }

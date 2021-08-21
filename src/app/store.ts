@@ -3,7 +3,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import animeSlice from '../reducers/anime.reducers'
+import animeSlice from '../reducers/anime.reducer'
+import searchSlice from '../reducers/search.reducer';
 
 const persistConfig = {
     key: 'root',
@@ -12,7 +13,8 @@ const persistConfig = {
 
 export const store = configureStore({
     reducer: {
-        animes: persistReducer(persistConfig, animeSlice)
+        animes: persistReducer(persistConfig, animeSlice),
+        search: searchSlice
     },
     middleware: [thunk]
 });
