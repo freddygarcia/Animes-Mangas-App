@@ -31,10 +31,9 @@ query GetAnimes($first: Int, $after: String){
 }
     `
 
-
 export const GetAnime = gql`
 query GetAnime($id: ID!) {
-  findAnimeById(id:$id) {
+  item: findAnimeById(id:$id) {
       averageRating
       description
       startDate

@@ -30,13 +30,13 @@ const AnimeScreen = ({ route, anime }: AnimeScreenProps) => {
         }
     });
 
-    const storeAnime = () => !loading && data?.findAnimeById && dispatch(saveAnime(data.findAnimeById));
+    const storeAnime = () => !loading && data?.item && dispatch(saveAnime(data.item));
 
     const openYoutubeLink = (anime: Anime) => (ev: GestureResponderEvent) => Linking.openURL(anime.trailer as string);
 
     useEffect(storeAnime, [loading]);
 
-    if (loading || anime === null || data?.findAnimeById === null) return <Loading />;
+    if (loading || anime === null || data?.item === null) return <Loading />;
     
     return (
         <ScrollView
