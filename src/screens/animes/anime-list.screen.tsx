@@ -1,47 +1,61 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { useQuery } from '@apollo/client'
 import { useDispatch } from 'react-redux'
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Button, Card, Icon, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
+import { Button, Card, Icon, List, StyleService, Text } from '@ui-kitten/components';
 
 import { useEffect } from 'react';
 import { RootState } from '../../app/store';
-import { GetAllAnimes } from '../../api/animes';
+import { GetAllAnimes, GetAnimesByTitle } from '../../api/animes';
 import { Anime } from '../../models/anime.model';
 import { ImageOverlay } from '../../components/ImageOverlay';
-import { saveAnimes, loadMore, State, reset } from '../../reducers/anime.reducer';
+import { saveAnimes, AnimeState, reset } from '../../reducers/anime.reducer';
+import { useQuery } from '../../hooks/api.hook';
+import { hide, loadMore, SearchState } from '../../reducers/search.reducer';
+import { NUM_OF_ITEMS_TO_RETRIEVE } from '../../app/contants';
 
 
 interface AnimesScreenProps {
     navigation: NativeStackNavigationProp<{}>;
-    state: State;
+    state: AnimeState;
+    search: SearchState
 }
 
-const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
+const AnimesScreen = ({ navigation, state, search }: AnimesScreenProps) => {
 
-    const RETRIEVE_QTY = 10;
-    const { animes, endCursor, internalCursor } = state;
+    const { animes } = state;
     const dispatch = useDispatch();
 
-    const { data, loading } = useQuery(GetAllAnimes, {
-        variables: {
-            first: RETRIEVE_QTY,
-            after: endCursor
-        }
+    const filters = {
+        first: NUM_OF_ITEMS_TO_RETRIEVE,
+        after: search.endCursor,
+        title: search.criteria
+    }
+
+    const { data, loading } = useQuery({
+        defaultQuery: GetAllAnimes,
+        queryOnSearch: GetAnimesByTitle,
+        variables: filters
     });
 
-    const storeAnimes = () => !loading && data && dispatch(saveAnimes(data));
+    const storeAnimes = () => !loading && data && dispatch(saveAnimes(data.rows.nodes));
+
+    const resetSearch = () => {
+        dispatch(hide());
+        dispatch(reset());
+    }
 
     const loadMoreAnimes = () => dispatch(loadMore());
 
     const onItemPress = (anime: Anime) => () => navigation.push('AnimeDetail', { id: anime.id });
 
-    useEffect(storeAnimes, [loading]);
+    useEffect(storeAnimes, [data]);
 
+    useEffect(resetSearch, [])
+    
     useEffect(() => {
-        return () => dispatch(reset());
+        return () => resetSearch();
     }, []);
 
     const renderItem = (itemInfo: ListRenderItemInfo<Anime>): React.ReactElement => (
@@ -128,7 +142,8 @@ const styles = StyleService.create({
 });
 
 const MapStateToProps = (state: RootState) => ({
-    state: state.animes
+    state: state.animes,
+    search: state.search
 });
 
 export default connect(MapStateToProps)(AnimesScreen);

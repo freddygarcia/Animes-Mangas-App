@@ -14,15 +14,13 @@ interface TopNavigationSearchProps {
 
 const TopNavigationSearch = (props: TopNavigationSearchProps) => {
 
-    const DEFAULT_DRAWER_ICON = 'menu';
-
     const dispatch = useDispatch();
     const { criteria, searching } = props.state;
     const animator = useRef(new Animated.Value(0)).current;
-    const [icon, setIcon] = useState(DEFAULT_DRAWER_ICON);
+    const [icon, setIcon] = useState(searching ? 'arrow-back-outline' : 'menu');
 
     const resetSearch = () => {
-        setIcon(DEFAULT_DRAWER_ICON)
+        setIcon('menu')
         dispatch(hide())
     };
 
