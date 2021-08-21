@@ -1,17 +1,14 @@
 import React from 'react';
-import { ImageStyle, StyleSheet, View, ViewProps } from 'react-native';
-import { Button, ButtonElement, Icon, IconElement, Text } from '@ui-kitten/components';
+import { StyleSheet, View, ViewProps } from 'react-native';
+import { Button, ButtonElement, Icon, Text } from '@ui-kitten/components';
 
 export interface RateBarProps extends ViewProps {
     label?: string;
     value: number;
 }
 
-export const StarIcon = (style: ImageStyle): IconElement => (
-    <Icon {...style} name='star' />
-);
 
-export const RateBar = (props: RateBarProps): React.ReactElement<ViewProps> => {
+const RateBar = (props: RateBarProps): React.ReactElement<ViewProps> => {
 
     const { label, ...restProps } = props;
 
@@ -25,7 +22,7 @@ export const RateBar = (props: RateBarProps): React.ReactElement<ViewProps> => {
                 appearance='ghost'
                 size='tiny'
                 status={status}
-                accessoryLeft={StarIcon}
+                accessoryLeft={<Icon name='star' />}
             />
         );
     };
@@ -58,3 +55,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 0,
     },
 });
+
+export default RateBar;

@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, ListProps, StyleType } from '@ui-kitten/components';
+import { Button, StyleType } from '@ui-kitten/components';
 
 interface CategoryListProps {
     style?: StyleType
     data: string[]
 }
 
-export const CategoryList = (props: CategoryListProps): React.ReactElement => {
+const CategoryList = (props: CategoryListProps): React.ReactElement => {
 
     const { style, data, ...viewProps } = props;
 
@@ -38,3 +38,5 @@ const styles = StyleSheet.create({
         marginHorizontal: 4,
     },
 });
+
+export default CategoryList;

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Button, Divider, Icon, Text, useStyleSheet } from "@ui-kitten/components";
 import { Image, ScrollView, StyleSheet, View, Linking, GestureResponderEvent } from "react-native";
-import { ImageOverlay } from "../../components/ImageOverlay";
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native'
 import { connect, useDispatch } from 'react-redux';
 import { useQuery } from '@apollo/client';
@@ -10,68 +8,19 @@ import { GetAnime } from '../../api/animes';
 import { Anime } from '../../models/anime.model';
 import { RootState } from '../../app/store';
 import { useEffect } from 'react';
-import { saveAnime } from '../../reducers/anime.reducers';
+import { saveAnime } from '../../reducers/anime.reducer';
 import Loading from '../../components/Loading';
-import { RateBar } from '../../components/details/RateBar';
-import { CategoryList } from '../../components/details/CategoryList';
-import InfoBox from '../../components/details/InfoBox';
-import { DetailsList } from '../../components/details/DetailsList';
-
-
-
-
-interface SecondaryViewProps {
-    anime: Anime;
-}
-
-const SecondaryView = ({ anime }: SecondaryViewProps) => (
-    <ImageOverlay
-        style={styles.container}
-        source={{ uri: anime.posterImage.original.url }}>
-        <View style={styles.profileDetailsContainer}>
-            <Text
-                style={styles.profileName}
-                category='h1'
-                status='control'>
-                {anime.titles.canonical}
-            </Text>
-            <Text
-                style={styles.profileLocation}
-                category='h6'
-                status='control'>
-                {anime.categories.nodes.map(category => category.title.en).join(', ')}
-            </Text>
-            <RateBar
-                label='Rating'
-                value={parseInt((anime.averageRating / 10).toFixed())}
-            />
-            <View style={styles.profileParametersContainer}>
-                <InfoBox
-                    hint='Duration'
-                    value={anime.episodeCount}
-                />
-                <InfoBox
-                    hint='Eps Duratin'
-                    value={anime.episodeCount}
-                />
-                <Button
-                    appearance='ghost'
-                    size='giant'
-                    accessoryLeft={<Icon name='heart-outline' />}
-                    status='control' />
-            </View>
-        </View>
-    </ImageOverlay>
-)
+import RateBar from '../../components/details/RateBar';
+import CategoryList from '../../components/details/CategoryList';
+import DetailsList from '../../components/details/DetailsList';
 
 
 interface AnimeScreenProps {
-    navigation: NativeStackNavigationProp<{}>;
     route: RouteProp<{ params: { id: number } }>;
     anime: Anime | null;
 }
 
-const AnimeScreen = ({ navigation, route, anime }: AnimeScreenProps) => {
+const AnimeScreen = ({ route, anime }: AnimeScreenProps) => {
 
     const styles = useStyleSheet(themedStyles);
     const dispatch = useDispatch();
@@ -83,12 +32,12 @@ const AnimeScreen = ({ navigation, route, anime }: AnimeScreenProps) => {
 
     const storeAnime = () => !loading && data?.findAnimeById && dispatch(saveAnime(data.findAnimeById));
 
-    const openYoutubeLink = (anime: Anime) => (ev: GestureResponderEvent) => Linking.openURL(anime.trailer);
+    const openYoutubeLink = (anime: Anime) => (ev: GestureResponderEvent) => Linking.openURL(anime.trailer as string);
 
     useEffect(storeAnime, [loading]);
 
     if (loading || anime === null || data?.findAnimeById === null) return <Loading />;
-
+    
     return (
         <ScrollView
             style={styles.container}

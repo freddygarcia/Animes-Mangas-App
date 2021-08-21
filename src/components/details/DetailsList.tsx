@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, ViewProps } from 'react-native';
-import { ListProps, StyleType, Text } from '@ui-kitten/components';
+import { StyleType, Text } from '@ui-kitten/components';
 
 interface DetailsListProps {
     style?: StyleType
@@ -12,7 +12,7 @@ interface DetailsListItem {
     description: string | number;
 }
 
-export const DetailsList = (props: DetailsListProps): React.ReactElement<ViewProps> => {
+const DetailsList = (props: DetailsListProps): React.ReactElement<ViewProps> => {
 
     const { style, data, ...viewProps } = props;
 
@@ -49,3 +49,5 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
     },
 });
+
+export default DetailsList;
