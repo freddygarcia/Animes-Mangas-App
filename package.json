@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "a" : "react-native link @react-native-async-storage/async-storage",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
@@ -25,6 +24,7 @@
     "graphql": "^15.5.1",
     "react": "17.0.1",
     "react-native": "0.64.1",
+    "react-native-bootsplash": "^3.2.4",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-reanimated": "^2.2.0",
     "react-native-safe-area-context": "^3.3.0",
