@@ -4,10 +4,12 @@ import { Manga } from "../models/manga.model"
 
 export interface MangaState {
     mangas: Manga[]
+    endCursor: string | null
 }
 
 export const initialState: MangaState = {
     mangas: [] as Manga[],
+    endCursor: null
 }
 
 export const mangaSlice = createSlice({
@@ -18,11 +20,16 @@ export const mangaSlice = createSlice({
             state.mangas = [];
         },
         save: (state, action) => {
-            state.mangas = [...state.mangas, ...action.payload];
+            state.endCursor = action.payload.rows.pageInfo.endCursor;
+            state.mangas = action.payload.rows.nodes;
+        },
+        append: (state, action) => {
+            state.endCursor = action.payload.rows.pageInfo.endCursor;
+            state.mangas = [...state.mangas, ...action.payload.rows.nodes];
         }
     }
 })
 
-export const { save, clear } = mangaSlice.actions
+export const { save, clear, append } = mangaSlice.actions
 
 export default mangaSlice.reducer;

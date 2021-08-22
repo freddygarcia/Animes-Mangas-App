@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 
 export const GetAllMangas = gql`
-query GetMangas($first: Int) {
-    rows: manga(first: $first) {
+query GetMangas($first: Int, $after: String){
+    rows: manga (first:$first, after: $after){
       pageInfo {
         startCursor
         endCursor

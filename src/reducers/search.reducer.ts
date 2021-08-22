@@ -4,16 +4,13 @@ import { createSlice } from "@reduxjs/toolkit";
 export interface SearchState {
     searching: boolean
     criteria: string
-
-    internalCursor: string | null
-    endCursor: string | null
+    loadingMore: boolean
 }
 
 export const initialState: SearchState = {
     searching: false,
     criteria: '',
-    internalCursor: null,
-    endCursor: null,
+    loadingMore: false,
 }
 
 export const searchSlice = createSlice({
@@ -30,16 +27,15 @@ export const searchSlice = createSlice({
         update: (state, action) => {
             state.criteria = action.payload
         },
-        saveCursor: (state, action) => {
-            state.endCursor = null;
-            state.internalCursor = action.payload.rows.pageInfo.endCursor;
+        cancelLoadMore : (state) => {
+            state.loadingMore = false
         },
         loadMore: (state) => {
-            state.endCursor = state.internalCursor;
+            state.loadingMore = true;
         }
     }
 })
 
-export const { update, hide, enable, saveCursor, loadMore } = searchSlice.actions
+export const { update, hide, enable, loadMore, cancelLoadMore } = searchSlice.actions
 
 export default searchSlice.reducer;

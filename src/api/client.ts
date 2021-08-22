@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { API_URL } from '../app/contants';
 
-const URI = 'https://kitsu.io/api/graphql';
+const URI = API_URL;
 
 export const client = new ApolloClient({
     uri: URI,

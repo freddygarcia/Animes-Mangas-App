@@ -2,8 +2,8 @@ import { useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import { ApiResponse } from "../models/anime.model";
-import { saveCursor, SearchState } from "../reducers/search.reducer";
+import { ApiResponse } from "../models/shared.model";
+import { SearchState } from "../reducers/search.reducer";
 
 
 interface useQueryProps {
@@ -12,29 +12,22 @@ interface useQueryProps {
     variables: any
 }
 
-interface useQueryResult {
+export interface useQueryResult {
     data: ApiResponse
     loading: boolean
 }
 
 export const useQuery = (props: useQueryProps): useQueryResult => {
 
-    const dispatch = useDispatch();
     const search = useSelector<RootState>(state => state.search) as SearchState;
     const [query, setQuery] = useState<any>(props.defaultQuery);
     const queryOnSearch = useLazyQuery(query);
 
     const [F, status] = queryOnSearch;
-    const callAPI = () => F({ variables: props.variables });
 
-    useEffect(() => {
-        if (status.data)
-            dispatch(saveCursor(status.data));
-    }, [status.data])
-
-    useEffect(() => {
-        callAPI();
-    }, []);
+    const callAPI = () => {
+        F({ variables: props.variables })
+    };
 
     useEffect(() => {
         if (search.searching && query == props.queryOnSearch) return;
@@ -52,10 +45,10 @@ export const useQuery = (props: useQueryProps): useQueryResult => {
     }, [search.criteria]);
 
     useEffect(() => {
-        if (search.endCursor) {
+        if (search.loadingMore) {
             callAPI();
         }
-    }, [search.endCursor])
+    }, [search.loadingMore])
 
     return {
         data: status.data,
