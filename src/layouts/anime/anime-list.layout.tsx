@@ -1,4 +1,4 @@
-import React, { } from 'react';
+import React from 'react';
 import SafeAreaLayout from '../../components/screen/SafeAreaLayout';
 import AnimesScreen from '../../screens/animes/anime-list.screen';
 import TopNavigationSearch from '../../components/navigation/TopNavigationSearch';

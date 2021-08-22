@@ -1,42 +1,28 @@
 import React from 'react';
 import { Button, Divider, Icon, Text, useStyleSheet } from "@ui-kitten/components";
-import { Image, ScrollView, StyleSheet, View, Linking, GestureResponderEvent } from "react-native";
+import { GestureResponderEvent, Image, Linking, ScrollView, StyleSheet, View } from "react-native";
 import { RouteProp } from '@react-navigation/native'
-import { connect, useDispatch } from 'react-redux';
-import { useQuery } from '@apollo/client';
-import { GetAnime } from '../../api/animes';
-import { Anime } from '../../models/anime.model';
+import { connect } from 'react-redux';
 import { RootState } from '../../app/store';
-import { useEffect } from 'react';
-import { saveAnime } from '../../reducers/anime.reducer';
 import Loading from '../../components/Loading';
 import RateBar from '../../components/details/RateBar';
 import CategoryList from '../../components/details/CategoryList';
 import DetailsList from '../../components/details/DetailsList';
+import { Anime } from '../../models/anime.model';
 
 
 interface AnimeScreenProps {
-    route: RouteProp<{ params: { id: number } }>;
-    anime: Anime | null;
+    route: RouteProp<{ params: { item: Anime } }>;
 }
 
-const AnimeScreen = ({ route, anime }: AnimeScreenProps) => {
+const AnimeScreen = ({ route }: AnimeScreenProps) => {
 
+    const anime: Anime = route.params.item;
     const styles = useStyleSheet(themedStyles);
-    const dispatch = useDispatch();
-    const { data, loading } = useQuery(GetAnime, {
-        variables: {
-            id: route.params.id
-        }
-    });
-
-    const storeAnime = () => !loading && data?.item && dispatch(saveAnime(data.item));
 
     const openYoutubeLink = (anime: Anime) => (ev: GestureResponderEvent) => Linking.openURL(anime.trailer as string);
 
-    useEffect(storeAnime, [loading]);
-
-    if (loading || anime === null || data?.item === null) return <Loading />;
+    if (anime === null) return <Loading />;
     
     return (
         <ScrollView

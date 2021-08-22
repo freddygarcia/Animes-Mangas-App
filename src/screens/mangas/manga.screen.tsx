@@ -1,81 +1,67 @@
 import React from 'react';
 import { Button, Divider, Icon, Text, useStyleSheet } from "@ui-kitten/components";
-import { Image, ScrollView, StyleSheet, View, Linking, GestureResponderEvent } from "react-native";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { RouteProp } from '@react-navigation/native'
-import { connect, useDispatch } from 'react-redux';
-import { useQuery } from '@apollo/client';
-import { Anime } from '../../models/anime.model';
+import { connect } from 'react-redux';
+import { Manga } from '../../models/manga.model';
 import { RootState } from '../../app/store';
-import { useEffect } from 'react';
-import { saveAnime } from '../../reducers/anime.reducer';
 import Loading from '../../components/Loading';
 import RateBar from '../../components/details/RateBar';
 import CategoryList from '../../components/details/CategoryList';
 import DetailsList from '../../components/details/DetailsList';
-import { GetManga } from '../../api/mangas';
+import { useItemHandler } from '../../hooks/item.hook';
 
 
 interface MangaScreenProps {
-    route: RouteProp<{ params: { id: number } }>;
-    anime: Anime | null;
+    route: RouteProp<{ params: { item: Manga } }>;
 }
 
-const MangaScreen = ({ route, anime }: MangaScreenProps) => {
-
+const MangaScreen = ({ route }: MangaScreenProps) => {
     
+    const manga: Manga = route.params.item;
     const styles = useStyleSheet(themedStyles);
-    const dispatch = useDispatch();
-    const { data, loading } = useQuery(GetManga, {
-        variables: {
-            id: route.params.id
-        }
-    });
+
+    console.log(manga);
     
-    const storeAnime = () => !loading && data?.item && dispatch(saveAnime(data.item));
+    if (manga === null) return <Loading />;
 
-    const openYoutubeLink = (anime: Anime) => (ev: GestureResponderEvent) => Linking.openURL(anime.trailer as string);
-
-    useEffect(storeAnime, [loading]);
-
-    if (loading || anime === null || data?.item === null) return <Loading />;
-    
     return (
         <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}>
             <Image
                 style={styles.primaryImage}
-                source={{ uri: anime.poster }}
+                source={{ uri: manga.poster }}
             />
             <Text
                 style={styles.titleLabel}
                 category='h6'>
-                {anime.title}
+                {manga.title}
             </Text>
             <CategoryList
                 style={styles.categoryList}
-                data={anime.categoryList}
+                data={manga.categoryList}
             />
             {
-                anime.averageRating &&
+                manga.averageRating &&
                 <RateBar
                     style={styles.rateBar}
-                    value={anime.rating}
+                    value={manga.rating}
                 />
             }
             <DetailsList
                 style={styles.detailsList}
                 data={[{
                     title: 'Year',
-                    description: anime.year
+                    description: manga.year
                 },
                 {
                     title: 'Duration',
-                    description: anime.episodeDuration
+                    description: manga.episodeDuration
                 },
                 {
                     title: 'Episodes',
-                    description: anime.numberOfEpisodes
+                    description: manga.numberOfEpisodes
                 }]}
             />
             <Divider />
@@ -84,8 +70,8 @@ const MangaScreen = ({ route, anime }: MangaScreenProps) => {
                     size='giant'
                     appearance={'ghost'}
                     style={styles.buttonTransparentBackground}
-                    disabled={anime.trailer === null}
-                    onPress={openYoutubeLink(anime)}
+                    disabled={manga.trailer === null}
+                    // onPress={openYoutubeLink(manga)}
                     accessoryLeft={<Icon name='film-outline' />}
                     status='basic' />
                 <Button
@@ -94,7 +80,7 @@ const MangaScreen = ({ route, anime }: MangaScreenProps) => {
                     accessoryLeft={<Icon name='heart-outline' />}
                     status='basic' />
             </View>
-            {Boolean(anime.description?.en) &&
+            {Boolean(manga.description?.en) &&
                 <>
                     <Text
                         style={styles.sinopsisSection}
@@ -104,7 +90,7 @@ const MangaScreen = ({ route, anime }: MangaScreenProps) => {
                     <Text
                         style={styles.descriptionLabel}
                         appearance='hint'>
-                        {anime.description?.en}
+                        {manga.description?.en}
                     </Text>
                 </>
             }
@@ -164,7 +150,7 @@ const themedStyles = StyleSheet.create({
 
 
 const MapStateToProps = (state: RootState) => ({
-    anime: state.animes.anime
+    manga: state
 });
 
 export default connect(MapStateToProps)(MangaScreen);

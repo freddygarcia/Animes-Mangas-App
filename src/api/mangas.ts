@@ -10,6 +10,11 @@ query GetMangas($first: Int) {
       }
   
       nodes {
+        averageRating
+        description
+        startDate
+        chapterCount
+        volumeCount
         bannerImage {
           original {
             url
@@ -17,7 +22,6 @@ query GetMangas($first: Int) {
         }
         id
         status
-        averageRating
         categories(first: 2) {
           nodes {
             title
@@ -37,26 +41,28 @@ query GetMangas($first: Int) {
 `
 export const GetManga = gql`
 query getManga($id: ID!) {
-    item: findMangaById(id: $id) {
-      averageRating
-      description
-      startDate
-  
-      categories(first: 3) {
-        nodes {
-          title
-        }
-      }
-      posterImage {
-        original {
-          url
-        }
-      }
-      titles {
-        canonical
+  item : findMangaById(id: $id) {
+    averageRating
+    description
+    startDate
+    volumeCount
+    chapterCount
+
+    categories(first: 3) {
+      nodes {
+        title
       }
     }
+    posterImage {
+      original {
+        url
+      }
+    }
+    titles {
+      canonical
+    }
   }
+}
 `
 export const GetMangasByTitle = gql`
 query searchMangaBytitle($first: Int, $title: String!, $after: String) {
@@ -74,8 +80,6 @@ query searchMangaBytitle($first: Int, $title: String!, $after: String) {
         }
         id
         status
-        averageRating
-        chapterCount
         categories(first: 2) {
           nodes {
             title

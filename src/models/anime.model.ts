@@ -1,17 +1,4 @@
-export interface ApiResponse {
-    rows: {
-        nodes: Anime[]
-        pageInfo: {
-            startCursor: string;
-            endCursor: string;
-        }
-    }
-}
-export interface Category {
-    title: {
-        en: string;
-    }
-}
+import { Category } from "./shared.model";
 
 export class Anime {
 
@@ -43,7 +30,7 @@ export class Anime {
     }
 
     get rating(): number {
-        return parseInt((this.averageRating / 10).toFixed());
+        return parseInt((this.averageRating / 20).toFixed());
     }
 
     get trailer(): string | null {

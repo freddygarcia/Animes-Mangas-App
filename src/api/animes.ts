@@ -10,7 +10,11 @@ query GetAnimes($first: Int, $after: String){
     }
     nodes{
       id
+      startDate
+      youtubeTrailerVideoId
       averageRating
+      episodeLength
+      description
       episodeCount
       totalLength
        categories (first:2){
