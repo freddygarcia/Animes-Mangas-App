@@ -18,8 +18,7 @@ export const mangaSlice = createSlice({
             state.mangas = [];
         },
         save: (state, action) => {
-            const incoming = action.payload.map((node: any) => new Manga(node));
-            state.mangas =  incoming; // [...state.animes, ...newAnimes];
+            state.mangas = [...state.mangas, ...action.payload];
         }
     }
 })

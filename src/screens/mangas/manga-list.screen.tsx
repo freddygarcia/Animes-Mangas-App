@@ -40,7 +40,7 @@ const MangasScreen = ({ navigation, mangas }: MangasScreenProps) => {
 }
 
 const MapStateToProps = (state: RootState) => ({
-    mangas: state.mangas.mangas,
+    mangas: state.mangas.mangas.map(anime => new Manga(anime)),
 });
 
 export default connect(MapStateToProps)(MangasScreen);

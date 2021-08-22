@@ -6,10 +6,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import animeSlice from '../reducers/anime.reducer'
 import mangaSlice from '../reducers/manga.reducer';
 import searchSlice from '../reducers/search.reducer';
+import {
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER,
+} from 'redux-persist'
 
 const persistConfig = {
     key: 'root',
-    storage: AsyncStorage
+    storage: AsyncStorage,
+    whitelist : ['animes', 'mangas']
 };
 
 export const store = configureStore({
@@ -18,7 +27,12 @@ export const store = configureStore({
         mangas: persistReducer(persistConfig, mangaSlice),
         search: searchSlice
     },
-    middleware: [thunk]
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }),
 });
 
 export const persistor = persistStore(store);

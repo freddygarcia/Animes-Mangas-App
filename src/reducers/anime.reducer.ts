@@ -6,7 +6,7 @@ export interface AnimeState {
     animes: Anime[]
 }
 
-export const initialState: AnimeState = {
+export const initialState: AnimeState =  {
     animes: [] as Anime[],
 }
 
@@ -18,12 +18,11 @@ export const animeSlice = createSlice({
             state.animes = [];
         },
         save: (state, action) => {
-            const incoming = action.payload.map((node: any) => new Anime(node));
-            state.animes = [...state.animes, ...incoming];
+            state.animes = [...state.animes, ...action.payload];
         }
     }
 })
 
-export const { save, clear } = animeSlice.actions
+export const { save } = animeSlice.actions
 
 export default animeSlice.reducer;

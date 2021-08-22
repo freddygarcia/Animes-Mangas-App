@@ -40,7 +40,7 @@ const AnimesScreen = ({ navigation, animes }: AnimesScreenProps) => {
 }
 
 const MapStateToProps = (state: RootState) => ({
-    animes: state.animes.animes,
+    animes: state.animes.animes.map(anime => new Anime(anime)),
 });
 
 export default connect(MapStateToProps)(AnimesScreen);
