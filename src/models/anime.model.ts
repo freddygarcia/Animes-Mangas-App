@@ -1,56 +1,31 @@
-import { Category } from "./shared.model";
+import { Category, Serie } from "./shared.model";
 
-export class Anime {
+export class Anime extends Serie {
 
-    id!: string;
     episodeCount!: number;
-    averageRating!: number;
     episodeLength!: number;
-    startDate!: string;
-    description?: {
-        en:
-        string;
-    } | undefined;
 
     youtubeTrailerVideoId!: number;
-    titles!: {
-        canonical: string;
-    };
-    categories!: {
-        nodes: Category[];
-    };
+
     posterImage!: {
         original: {
             url: string;
         };
     };
 
-    constructor(obj: Anime) {
-        Object.assign(this, obj);
-    }
+    constructor(obj: any) {
+        super();
 
-    get rating(): number {
-        return parseInt((this.averageRating / 20).toFixed());
+        this.original = obj;    
+        Object.assign(this, obj);
     }
 
     get trailer(): string | null {
         return this.youtubeTrailerVideoId ? `https://www.youtube.com/watch?v=${this.youtubeTrailerVideoId}` : null;
     }
 
-    get title(): string {
-        return this.titles.canonical
-    }
-
-    get categoryList(): any {
-        return this.categories.nodes.map(category => category.title.en);
-    }
-
     get poster(): string {
         return this.posterImage?.original.url;
-    }
-
-    get year(): number {
-        return new Date(this.startDate).getFullYear();
     }
 
     get numberOfEpisodes(): string {

@@ -1,50 +1,35 @@
-import { Category } from "./shared.model";
+import { Category, Serie } from "./shared.model";
 
-export class Manga {
+export class Manga extends Serie {
 
-    id!: string;
-    averageRating!: number;
-    startDate!: string;
     chapterCount!: number
-    description?: {
-        en:
-        string;
-    } | undefined;
+    volumeCount!: number
 
-    titles!: {
-        canonical: string;
-    };
-    categories!: {
-        nodes: Category[];
-    };
     posterImage!: {
         original: {
             url: string;
         };
     };
 
-    constructor(obj: Manga) {
+    constructor(obj: any) {
+        super();
+
+        this.original = obj;    
         Object.assign(this, obj);
     }
 
-    get rating(): number {
-        return parseInt((this.averageRating / 10).toFixed());
+    get chapters(): string {
+        return this.chapterCount ? this.chapterCount.toString() : '?'
     }
-
-    get title(): string {
-        return this.titles.canonical
-    }
-
-    get categoryList(): any {
-        return this.categories.nodes.map(category => category.title.en);
+    
+    get volumes(): string {
+        return this.volumeCount ? this.volumeCount.toString() : '?'
     }
 
     get poster(): string {
         return this.posterImage?.original.url;
     }
 
-    get year(): number {
-        return new Date(this.startDate).getFullYear();
-    }
+
 
 }
