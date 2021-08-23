@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect, } from 'react-redux';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { List } from '@ui-kitten/components';
@@ -10,6 +10,8 @@ import ListItem from '../../components/screen/ListItem';
 import { Anime } from '../../models/anime.model';
 import { AnimeState, append, save } from '../../reducers/anime.reducer';
 import { LIST_ITEMS_THRESHOLD } from '../../app/contants';
+import { saveAnime as bookmarkAction, deleteAnime as unbookmarkAction } from '../../reducers/bookmark.reducer';
+import usetoogleBookmark from '../../hooks/bookmark.hook';
 
 
 interface AnimesScreenProps {
@@ -20,6 +22,7 @@ interface AnimesScreenProps {
 const AnimesScreen = ({ navigation, animes }: AnimesScreenProps) => {
 
     const cursorRef = animes.endCursor;
+    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction});
     const { loadMore } = useItemsHandler({
         cursorRef,
         queries: {
@@ -37,7 +40,10 @@ const AnimesScreen = ({ navigation, animes }: AnimesScreenProps) => {
             onEndReached={loadMore}
             onEndReachedThreshold={LIST_ITEMS_THRESHOLD}
             data={animes.animes}
-            renderItem={itemInfo => <ListItem itemInfo={itemInfo} onPress={onItemPress} />}
+            renderItem={itemInfo => <ListItem
+                itemInfo={itemInfo}
+                onBookmarkSave={bookmark}
+                onPress={onItemPress} />}
         />
     );
 }
@@ -45,7 +51,7 @@ const AnimesScreen = ({ navigation, animes }: AnimesScreenProps) => {
 const MapStateToProps = (state: RootState) => ({
     animes: {
         ...state.animes,
-        animes: state.animes.animes.map(anime => new Anime(anime))
+        animes: state.animes.animes.map(anime => (new Anime({ ...anime, isBookmarked: Boolean(state.bookmark.animes[anime.id] !== undefined) })))
     },
 });
 

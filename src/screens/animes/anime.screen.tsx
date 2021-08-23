@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Divider, Icon, Text, useStyleSheet } from "@ui-kitten/components";
 import { GestureResponderEvent, Image, Linking, ScrollView, StyleSheet, View } from "react-native";
 import { RouteProp } from '@react-navigation/native'
-import { connect } from 'react-redux';
-import { RootState } from '../../app/store';
 import Loading from '../../components/Loading';
 import RateBar from '../../components/details/RateBar';
 import CategoryList from '../../components/details/CategoryList';
 import DetailsList from '../../components/details/DetailsList';
 import { Anime } from '../../models/anime.model';
+import { deleteAnime as unbookmarkAction, saveAnime as bookmarkAction } from '../../reducers/bookmark.reducer';
+import BookmarkButton from '../../components/details/BookmarkButton';
+import usetoogleBookmark from '../../hooks/bookmark.hook';
 
 
 interface AnimeScreenProps {
@@ -17,13 +18,19 @@ interface AnimeScreenProps {
 
 const AnimeScreen = ({ route }: AnimeScreenProps) => {
 
-    const anime: Anime = route.params.item;
+    const [anime, setAnime] = useState(route.params.item);
     const styles = useStyleSheet(themedStyles);
+    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction });
 
     const openYoutubeLink = (anime: Anime) => (ev: GestureResponderEvent) => Linking.openURL(anime.trailer as string);
 
+    const toogleBookmark = (anime: Anime) => {
+        bookmark(anime);
+        setAnime(anime => new Anime({ ...anime, isBookmarked: !anime.isBookmarked }))
+    }
+
     if (anime === null) return <Loading />;
-    
+
     return (
         <ScrollView
             style={styles.container}
@@ -73,11 +80,12 @@ const AnimeScreen = ({ route }: AnimeScreenProps) => {
                     onPress={openYoutubeLink(anime)}
                     accessoryLeft={<Icon name='film-outline' />}
                     status='basic' />
-                <Button
-                    size='giant'
-                    appearance={'ghost'}
-                    accessoryLeft={<Icon name='heart-outline' />}
-                    status='basic' />
+
+                <BookmarkButton
+                    status='basic'
+                    onBookmarkSave={toogleBookmark}
+                    item={anime}
+                />
             </View>
             {Boolean(anime.description?.en) &&
                 <>
@@ -146,10 +154,4 @@ const themedStyles = StyleSheet.create({
     }
 });
 
-
-
-const MapStateToProps = (state: RootState) => ({
-    anime: state.animes.anime
-});
-
-export default connect(MapStateToProps)(AnimeScreen);
+export default AnimeScreen;

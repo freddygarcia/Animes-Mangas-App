@@ -1,28 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Divider, Icon, Text, useStyleSheet } from "@ui-kitten/components";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { RouteProp } from '@react-navigation/native'
-import { connect } from 'react-redux';
 import { Manga } from '../../models/manga.model';
-import { RootState } from '../../app/store';
 import Loading from '../../components/Loading';
 import RateBar from '../../components/details/RateBar';
 import CategoryList from '../../components/details/CategoryList';
 import DetailsList from '../../components/details/DetailsList';
-import { useItemHandler } from '../../hooks/item.hook';
-
+import { deleteManga as unbookmarkAction, saveManga as bookmarkAction } from '../../reducers/bookmark.reducer';
+import usetoogleBookmark from '../../hooks/bookmark.hook';
+import BookmarkButton from '../../components/details/BookmarkButton';
 
 interface MangaScreenProps {
     route: RouteProp<{ params: { item: Manga } }>;
+    bookmark: (manga: Manga) => void;
+    unbookmark: (id: string) => void;
 }
 
 const MangaScreen = ({ route }: MangaScreenProps) => {
-    
-    const manga: Manga = route.params.item;
-    const styles = useStyleSheet(themedStyles);
 
-    console.log(manga);
-    
+    const [manga, setManga] = useState(route.params.item);
+    const styles = useStyleSheet(themedStyles);
+    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction });
+
+    const toogleBookmark = (manga: Manga) => {
+        bookmark(manga);
+        setManga(manga => new Manga({ ...manga, isBookmarked: !manga.isBookmarked }))
+    }
+
     if (manga === null) return <Loading />;
 
     return (
@@ -56,12 +61,12 @@ const MangaScreen = ({ route }: MangaScreenProps) => {
                     description: manga.year
                 },
                 {
-                    title: 'Duration',
-                    description: manga.episodeDuration
+                    title: 'Volumes',
+                    description: manga.volumes
                 },
                 {
-                    title: 'Episodes',
-                    description: manga.numberOfEpisodes
+                    title: 'Chapters',
+                    description: manga.chapters
                 }]}
             />
             <Divider />
@@ -70,15 +75,15 @@ const MangaScreen = ({ route }: MangaScreenProps) => {
                     size='giant'
                     appearance={'ghost'}
                     style={styles.buttonTransparentBackground}
-                    disabled={manga.trailer === null}
-                    // onPress={openYoutubeLink(manga)}
+                    disabled={true}
                     accessoryLeft={<Icon name='film-outline' />}
                     status='basic' />
-                <Button
-                    size='giant'
-                    appearance={'ghost'}
-                    accessoryLeft={<Icon name='heart-outline' />}
-                    status='basic' />
+
+                <BookmarkButton
+                    status='basic'
+                    onBookmarkSave={toogleBookmark}
+                    item={manga}
+                />
             </View>
             {Boolean(manga.description?.en) &&
                 <>
@@ -147,10 +152,4 @@ const themedStyles = StyleSheet.create({
     }
 });
 
-
-
-const MapStateToProps = (state: RootState) => ({
-    manga: state
-});
-
-export default connect(MapStateToProps)(MangaScreen);
+export default MangaScreen;

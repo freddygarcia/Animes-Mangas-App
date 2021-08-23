@@ -1,13 +1,15 @@
 import React from 'react';
 import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
-import { Button, Card, Icon, StyleService, Text } from '@ui-kitten/components';
+import { Button, Card, StyleService, Text } from '@ui-kitten/components';
 
 import { ImageOverlay } from '../ImageOverlay';
 import { Anime } from '../../models/anime.model';
 import { Manga } from '../../models/manga.model';
+import BookmarkButton from '../details/BookmarkButton';
 
 interface ItemListProps {
     itemInfo: ListRenderItemInfo<Anime | Manga>
+    onBookmarkSave: Function
     onPress: Function
 }
 
@@ -33,13 +35,13 @@ const ListItem = (props: ItemListProps): React.ReactElement => (
                     {props.itemInfo.item.categoryList?.join(', ')}
                 </Button>
 
-                <Button
+                <BookmarkButton
+                    label={props.itemInfo.item.isBookmarked ? 'Saved' : 'Save'}
+                    size='medium'
                     style={[styles.iconButton, { position: 'absolute', right: 0 }]}
-                    appearance='ghost'
-                    status='control'
-                    accessoryLeft={<Icon name='heart-outline' />}
-                > Save
-                </Button>
+                    onBookmarkSave={() => props.onBookmarkSave(props.itemInfo.item)}
+                    item={props.itemInfo.item}
+                 />
             </View>
         </ImageOverlay>
     </Card>

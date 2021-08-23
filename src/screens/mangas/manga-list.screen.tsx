@@ -10,6 +10,8 @@ import ListItem from '../../components/screen/ListItem';
 import { Manga } from '../../models/manga.model';
 import { save, append, MangaState } from '../../reducers/manga.reducer';
 import { LIST_ITEMS_THRESHOLD } from '../../app/contants';
+import usetoogleBookmark from '../../hooks/bookmark.hook';
+import { saveManga as bookmarkAction, deleteManga as unbookmarkAction } from '../../reducers/bookmark.reducer';
 
 interface MangasScreenProps {
     navigation: NativeStackNavigationProp<{}>;
@@ -19,6 +21,7 @@ interface MangasScreenProps {
 const MangasScreen = ({ navigation, mangas }: MangasScreenProps) => {
 
     const cursorRef = mangas.endCursor;
+    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction});
     const { loadMore } = useItemsHandler({
         cursorRef,
         queries: {
@@ -36,7 +39,10 @@ const MangasScreen = ({ navigation, mangas }: MangasScreenProps) => {
             onEndReached={loadMore}
             onEndReachedThreshold={LIST_ITEMS_THRESHOLD}
             data={mangas.mangas}
-            renderItem={itemInfo => <ListItem itemInfo={itemInfo} onPress={onItemPress} />}
+            renderItem={itemInfo => <ListItem
+                itemInfo={itemInfo}
+                onBookmarkSave={bookmark}
+                onPress={onItemPress} />}
         />
     );
 }
@@ -44,7 +50,7 @@ const MangasScreen = ({ navigation, mangas }: MangasScreenProps) => {
 const MapStateToProps = (state: RootState) => ({
     mangas: {
         ...state.mangas,
-        mangas: state.mangas.mangas.map(manga => new Manga(manga))
+        mangas: state.mangas.mangas.map(manga => (new Manga({ ...manga, isBookmarked: Boolean(state.bookmark.mangas[manga.id] !== undefined) })))
     },
 });
 
