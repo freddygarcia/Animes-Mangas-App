@@ -8,6 +8,7 @@ import ListItem from '../../../components/screen/BookmarkListItem';
 import { saveManga as bookmarkAction, deleteManga as unbookmarkAction } from '../../../reducers/bookmark.reducer';
 import usetoogleBookmark from '../../../hooks/toogle-bookmark.hook';
 import { Manga } from '../../../models/manga.model';
+import useQueryBookmarks from '../../../hooks/query-bookmark.hook';
 
 
 interface MangasScreenProps {
@@ -16,18 +17,19 @@ interface MangasScreenProps {
 
 const BookmarkMangasScreen = ({ navigation }: MangasScreenProps) => {
 
-    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction });
-    const mangasDict = useSelector<RootState>(state => state.bookmark.mangas) as object;
-    const mangas = Object.values(mangasDict).map(manga => new Manga({ ...manga, isBookmarked: true }));
+    const toogleBookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction });
+    const db = useSelector<RootState>(state => state.bookmark.mangas) as object;
+    const series = Object.values(db).map(manga => new Manga({ ...manga, isBookmarked: true }));
+    const bookmarks = useQueryBookmarks({ series });
 
     const onItemPress = (manga: Manga) => () => navigation.navigate('MangasBookmarkDetail', { item: manga });
 
     return (
         <List
-            data={mangas}
+            data={bookmarks}
             renderItem={itemInfo => <ListItem
                 itemInfo={itemInfo}
-                onBookmarkSave={bookmark}
+                onBookmarkSave={toogleBookmark}
                 onPress={onItemPress} />}
         />
     );

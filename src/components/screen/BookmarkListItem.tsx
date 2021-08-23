@@ -1,14 +1,12 @@
 import React from 'react';
-import { ListRenderItemInfo, StyleSheet, View, } from 'react-native';
-import { Button, Card, Icon, Text } from '@ui-kitten/components';
+import { ListRenderItemInfo, StyleSheet } from 'react-native';
+import { Card, Icon, Text } from '@ui-kitten/components';
 
-import { ImageOverlay } from '../ImageOverlay';
-import { Anime } from '../../models/anime.model';
-import { Manga } from '../../models/manga.model';
 import BookmarkButton from '../details/BookmarkButton';
+import { Serie } from '../../models/shared.model';
 
 interface ItemListProps {
-    itemInfo: ListRenderItemInfo<Anime | Manga>
+    itemInfo: ListRenderItemInfo<Serie>
     onBookmarkSave: Function
     onPress: Function
 }
