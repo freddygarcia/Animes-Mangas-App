@@ -7,6 +7,7 @@ import BookmarksNavigation from './bookmark.navigation';
 import usePreload from '../hooks/preload.hook';
 import { HIDE_HEADER } from '../app/contants';
 import MainDrawer from '../components/navigation/Drawer';
+import ProfileLayout from '../layouts/profile/profile.layout';
 
 const Drawer = createDrawerNavigator();
 
@@ -19,7 +20,7 @@ export const AppNavigator = (): React.ReactElement => {
             <Drawer.Navigator
                 screenOptions={HIDE_HEADER}
                 drawerContent={props => <MainDrawer {...props} />}>
-                {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
+                <Drawer.Screen name="Me" component={ProfileLayout} />
                 <Drawer.Screen name="Animes" component={AnimesNavigation} />
                 <Drawer.Screen name="Manga" component={MangasNavigation} />
                 <Drawer.Screen name="Favorites" component={BookmarksNavigation} />
