@@ -5,6 +5,7 @@ import AnimesNavigation from './anime.navigation';
 import MangasNavigation from './manga.navigation';
 import BookmarksNavigation from './bookmark.navigation';
 import usePreload from '../hooks/preload.hook';
+import { HIDE_HEADER } from '../app/contants';
 
 const Drawer = createDrawerNavigator();
 
@@ -14,7 +15,7 @@ export const AppNavigator = (): React.ReactElement => {
 
     return (
         <NavigationContainer>
-            <Drawer.Navigator screenOptions={{ headerShown: false }}>
+            <Drawer.Navigator screenOptions={HIDE_HEADER}>
                 {/* <Drawer.Screen name="Home" component={HomeScreen} /> */}
                 <Drawer.Screen name="Animes" component={AnimesNavigation} />
                 <Drawer.Screen name="Manga" component={MangasNavigation} />
