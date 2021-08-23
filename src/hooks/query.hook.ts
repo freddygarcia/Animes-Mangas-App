@@ -43,7 +43,7 @@ export const useQueryHandler = (props: ItemsProps) => {
     const loadMore = () => dispatch(loadMore_());
 
     useEffect(() => {
-        if (checkQueryIsValid(query) && search.searching && !search.loadingMore) {
+        if (checkQueryIsValid(query) && !search.loadingMore) {
             dispatch(props.actions.save(query.data));
         }
     }, [query.data]);

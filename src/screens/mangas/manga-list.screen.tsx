@@ -14,6 +14,8 @@ import usetoggleBookmark from '../../hooks/toggle-bookmark.hook';
 import { saveManga as bookmarkAction, deleteManga as unbookmarkAction } from '../../reducers/bookmark.reducer';
 import { useNetInfo } from "@react-native-community/netinfo";
 import NoInternetConnection from '../../components/NoIntenetConnection';
+import Loading from '../../components/Loading';
+import NothingToDisplay from '../../components/NothingToDisplay';
 
 interface MangasScreenProps {
     navigation: NativeStackNavigationProp<{}>;
@@ -23,9 +25,9 @@ interface MangasScreenProps {
 const MangasScreen = ({ navigation, state }: MangasScreenProps) => {
 
     const cursorRef = state.endCursor;
-    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction});
+    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction });
     const netInfo = useNetInfo();
-    const { search, loadMore } = useQueryHandler({
+    const { query, search, loadMore } = useQueryHandler({
         cursorRef,
         queries: {
             defaultQuery, queryOnSearch
@@ -41,6 +43,10 @@ const MangasScreen = ({ navigation, state }: MangasScreenProps) => {
         if (search.searching && search.criteria) return <NoInternetConnection />
         if (state.mangas.length === 0) return <NoInternetConnection />
     }
+
+    if (search.searching && query.data && query.data.rows.nodes.length === 0) return <NothingToDisplay />
+
+    if (query.loading) return <Loading />
 
     return (
         <List

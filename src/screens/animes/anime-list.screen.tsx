@@ -14,6 +14,8 @@ import { saveAnime as bookmarkAction, deleteAnime as unbookmarkAction } from '..
 import usetoggleBookmark from '../../hooks/toggle-bookmark.hook';
 import { useNetInfo } from "@react-native-community/netinfo";
 import NoInternetConnection from '../../components/NoIntenetConnection';
+import Loading from '../../components/Loading';
+import NothingToDisplay from '../../components/NothingToDisplay';
 
 
 interface AnimesScreenProps {
@@ -26,7 +28,7 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
     const cursorRef = state.endCursor;
     const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction });
     const netInfo = useNetInfo();
-    const { search, loadMore } = useQueryHandler({
+    const { query, search, loadMore } = useQueryHandler({
         cursorRef,
         queries: {
             defaultQuery, queryOnSearch
@@ -42,6 +44,10 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
         if (search.searching && search.criteria) return <NoInternetConnection />
         if (state.animes.length === 0) return <NoInternetConnection />
     }
+
+    if (search.searching && query.data && query.data.rows.nodes.length === 0) return <NothingToDisplay />
+
+    if (query.loading) return <Loading />
 
     return (
         <List
