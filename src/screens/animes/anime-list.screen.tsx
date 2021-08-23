@@ -12,18 +12,21 @@ import { AnimeState, append, save } from '../../reducers/anime.reducer';
 import { LIST_ITEMS_THRESHOLD } from '../../app/contants';
 import { saveAnime as bookmarkAction, deleteAnime as unbookmarkAction } from '../../reducers/bookmark.reducer';
 import usetoggleBookmark from '../../hooks/toggle-bookmark.hook';
+import { useNetInfo } from "@react-native-community/netinfo";
+import NoInternetConnection from '../../components/NoIntenetConnection';
 
 
 interface AnimesScreenProps {
     navigation: NativeStackNavigationProp<{}>;
-    animes: AnimeState;
+    state: AnimeState;
 }
 
-const AnimesScreen = ({ navigation, animes }: AnimesScreenProps) => {
+const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
 
-    const cursorRef = animes.endCursor;
-    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction});
-    const { loadMore } = useItemsHandler({
+    const cursorRef = state.endCursor;
+    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction });
+    const netInfo = useNetInfo();
+    const { search, loadMore } = useItemsHandler({
         cursorRef,
         queries: {
             defaultQuery, queryOnSearch
@@ -35,11 +38,16 @@ const AnimesScreen = ({ navigation, animes }: AnimesScreenProps) => {
 
     const onItemPress = (anime: Anime) => () => navigation.push('AnimeDetail', { item: anime });
 
+    if (!netInfo.isInternetReachable) {
+        if (search.searching && search.criteria) return <NoInternetConnection />
+        if (state.animes.length === 0) return <NoInternetConnection />
+    }
+
     return (
         <List
             onEndReached={loadMore}
             onEndReachedThreshold={LIST_ITEMS_THRESHOLD}
-            data={animes.animes}
+            data={state.animes}
             renderItem={itemInfo => <ListItem
                 itemInfo={itemInfo}
                 onBookmarkSave={bookmark}
@@ -49,7 +57,7 @@ const AnimesScreen = ({ navigation, animes }: AnimesScreenProps) => {
 }
 
 const MapStateToProps = (state: RootState) => ({
-    animes: {
+    state: {
         ...state.animes,
         animes: state.animes.animes.map(anime => (new Anime({ ...anime, isBookmarked: Boolean(state.bookmark.animes[anime.id] !== undefined) })))
     },

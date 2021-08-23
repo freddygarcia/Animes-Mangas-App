@@ -59,6 +59,7 @@ export const useItemsHandler = (props: ItemsProps) => {
 
     return {
         query,
-        loadMore
+        search,
+        loadMore,
     }
 }
