@@ -22,6 +22,11 @@ Make sure your device is connected.
 
 `$ yarn android`
 
+# Running from APK
+
+The app latest APK is located at `<project_root>/APK/`
+
+
 ## Technical Features
 
 - [Typescript](https://www.typescriptlang.org)
