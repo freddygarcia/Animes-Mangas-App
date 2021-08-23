@@ -73,6 +73,7 @@ query searchMangaBytitle($first: Int, $title: String!, $after: String) {
       }
   
       nodes {
+        startDate
         bannerImage {
           original {
             url

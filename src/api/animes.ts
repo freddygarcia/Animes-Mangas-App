@@ -70,29 +70,26 @@ query searchAnimeByTitle($first: Int, $title: String!, $after: String) {
       }
   
       nodes {
-        youtubeTrailerVideoId
-        bannerImage {
-          original {
-            url
-          }
-        }
         id
-        status
+        startDate
+        youtubeTrailerVideoId
         averageRating
+        episodeLength
+        description
         episodeCount
         totalLength
-        categories(first: 2) {
-          nodes {
-            title
-          }
-        }
-        posterImage {
-          original {
-            url
-          }
-        }
+         categories (first:2){
+           nodes{
+             title
+           }
+         }
+         posterImage{
+           original{
+             url
+           }
+         }
         titles {
-          canonical
+          canonical 
         }
       }
     }
