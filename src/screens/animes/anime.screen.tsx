@@ -9,7 +9,7 @@ import DetailsList from '../../components/details/DetailsList';
 import { Anime } from '../../models/anime.model';
 import { deleteAnime as unbookmarkAction, saveAnime as bookmarkAction } from '../../reducers/bookmark.reducer';
 import BookmarkButton from '../../components/details/BookmarkButton';
-import usetoogleBookmark from '../../hooks/bookmark.hook';
+import usetoogleBookmark from '../../hooks/toogle-bookmark.hook';
 
 
 interface AnimeScreenProps {

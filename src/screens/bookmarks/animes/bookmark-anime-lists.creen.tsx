@@ -7,7 +7,7 @@ import { RootState } from '../../../app/store';
 import ListItem from '../../../components/screen/BookmarkListItem';
 import { Anime } from '../../../models/anime.model';
 import { saveAnime as bookmarkAction, deleteAnime as unbookmarkAction } from '../../../reducers/bookmark.reducer';
-import usetoogleBookmark from '../../../hooks/bookmark.hook';
+import usetoogleBookmark from '../../../hooks/toogle-bookmark.hook';
 
 
 interface AnimesScreenProps {

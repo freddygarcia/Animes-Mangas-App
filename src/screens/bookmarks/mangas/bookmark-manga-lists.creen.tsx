@@ -6,7 +6,7 @@ import { List } from '@ui-kitten/components';
 import { RootState } from '../../../app/store';
 import ListItem from '../../../components/screen/BookmarkListItem';
 import { saveManga as bookmarkAction, deleteManga as unbookmarkAction } from '../../../reducers/bookmark.reducer';
-import usetoogleBookmark from '../../../hooks/bookmark.hook';
+import usetoogleBookmark from '../../../hooks/toogle-bookmark.hook';
 import { Manga } from '../../../models/manga.model';
 
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Divider, Icon, Text, useStyleSheet } from "@ui-kitten/components";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { RouteProp } from '@react-navigation/native'
-import usetoogleBookmark from '../../../hooks/bookmark.hook';
+import usetoogleBookmark from '../../../hooks/toogle-bookmark.hook';
 import { saveManga as bookmarkAction, deleteManga as unbookmarkAction } from '../../../reducers/bookmark.reducer';
 import Loading from '../../../components/Loading';
 import CategoryList from '../../../components/details/CategoryList';

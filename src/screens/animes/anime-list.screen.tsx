@@ -11,7 +11,7 @@ import { Anime } from '../../models/anime.model';
 import { AnimeState, append, save } from '../../reducers/anime.reducer';
 import { LIST_ITEMS_THRESHOLD } from '../../app/contants';
 import { saveAnime as bookmarkAction, deleteAnime as unbookmarkAction } from '../../reducers/bookmark.reducer';
-import usetoogleBookmark from '../../hooks/bookmark.hook';
+import usetoogleBookmark from '../../hooks/toogle-bookmark.hook';
 
 
 interface AnimesScreenProps {

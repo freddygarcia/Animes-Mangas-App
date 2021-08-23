@@ -8,7 +8,7 @@ import RateBar from '../../components/details/RateBar';
 import CategoryList from '../../components/details/CategoryList';
 import DetailsList from '../../components/details/DetailsList';
 import { deleteManga as unbookmarkAction, saveManga as bookmarkAction } from '../../reducers/bookmark.reducer';
-import usetoogleBookmark from '../../hooks/bookmark.hook';
+import usetoogleBookmark from '../../hooks/toogle-bookmark.hook';
 import BookmarkButton from '../../components/details/BookmarkButton';
 
 interface MangaScreenProps {
