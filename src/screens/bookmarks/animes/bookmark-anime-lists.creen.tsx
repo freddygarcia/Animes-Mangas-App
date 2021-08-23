@@ -7,7 +7,7 @@ import { RootState } from '../../../app/store';
 import ListItem from '../../../components/screen/BookmarkListItem';
 import { Anime } from '../../../models/anime.model';
 import { saveAnime as bookmarkAction, deleteAnime as unbookmarkAction } from '../../../reducers/bookmark.reducer';
-import usetoogleBookmark from '../../../hooks/toogle-bookmark.hook';
+import usetoggleBookmark from '../../../hooks/toggle-bookmark.hook';
 import useQueryBookmarks from '../../../hooks/query-bookmark.hook';
 
 
@@ -17,7 +17,7 @@ interface AnimesScreenProps {
 
 const BookmarkAnimesScreen = ({ navigation }: AnimesScreenProps) => {
 
-    const toogleBookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction });
+    const toggleBookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction });
     const db = useSelector<RootState>(state => state.bookmark.animes) as object;
     const series = Object.values(db).map(anime => new Anime({ ...anime, isBookmarked: true }));
     const bookmarks = useQueryBookmarks({ series });
@@ -29,7 +29,7 @@ const BookmarkAnimesScreen = ({ navigation }: AnimesScreenProps) => {
             data={bookmarks}
             renderItem={itemInfo => <ListItem
                 itemInfo={itemInfo}
-                onBookmarkSave={toogleBookmark}
+                onBookmarkSave={toggleBookmark}
                 onPress={onItemPress} />}
         />
     );

@@ -10,7 +10,7 @@ import ListItem from '../../components/screen/ListItem';
 import { Manga } from '../../models/manga.model';
 import { save, append, MangaState } from '../../reducers/manga.reducer';
 import { LIST_ITEMS_THRESHOLD } from '../../app/contants';
-import usetoogleBookmark from '../../hooks/toogle-bookmark.hook';
+import usetoggleBookmark from '../../hooks/toggle-bookmark.hook';
 import { saveManga as bookmarkAction, deleteManga as unbookmarkAction } from '../../reducers/bookmark.reducer';
 
 interface MangasScreenProps {
@@ -21,7 +21,7 @@ interface MangasScreenProps {
 const MangasScreen = ({ navigation, mangas }: MangasScreenProps) => {
 
     const cursorRef = mangas.endCursor;
-    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction});
+    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction});
     const { loadMore } = useItemsHandler({
         cursorRef,
         queries: {

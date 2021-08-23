@@ -9,7 +9,7 @@ import DetailsList from '../../components/details/DetailsList';
 import { Anime } from '../../models/anime.model';
 import { deleteAnime as unbookmarkAction, saveAnime as bookmarkAction } from '../../reducers/bookmark.reducer';
 import BookmarkButton from '../../components/details/BookmarkButton';
-import usetoogleBookmark from '../../hooks/toogle-bookmark.hook';
+import usetoggleBookmark from '../../hooks/toggle-bookmark.hook';
 
 
 interface AnimeScreenProps {
@@ -20,11 +20,11 @@ const AnimeScreen = ({ route }: AnimeScreenProps) => {
 
     const [anime, setAnime] = useState(route.params.item);
     const styles = useStyleSheet(themedStyles);
-    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction });
+    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction });
 
     const openYoutubeLink = (anime: Anime) => (ev: GestureResponderEvent) => Linking.openURL(anime.trailer as string);
 
-    const toogleBookmark = (anime: Anime) => {
+    const toggleBookmark = (anime: Anime) => {
         bookmark(anime);
         setAnime(anime => new Anime({ ...anime, isBookmarked: !anime.isBookmarked }))
     }
@@ -83,7 +83,7 @@ const AnimeScreen = ({ route }: AnimeScreenProps) => {
 
                 <BookmarkButton
                     status='basic'
-                    onBookmarkSave={toogleBookmark}
+                    onBookmarkSave={toggleBookmark}
                     item={anime}
                 />
             </View>

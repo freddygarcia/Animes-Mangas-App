@@ -11,7 +11,7 @@ import { Anime } from '../../models/anime.model';
 import { AnimeState, append, save } from '../../reducers/anime.reducer';
 import { LIST_ITEMS_THRESHOLD } from '../../app/contants';
 import { saveAnime as bookmarkAction, deleteAnime as unbookmarkAction } from '../../reducers/bookmark.reducer';
-import usetoogleBookmark from '../../hooks/toogle-bookmark.hook';
+import usetoggleBookmark from '../../hooks/toggle-bookmark.hook';
 
 
 interface AnimesScreenProps {
@@ -22,7 +22,7 @@ interface AnimesScreenProps {
 const AnimesScreen = ({ navigation, animes }: AnimesScreenProps) => {
 
     const cursorRef = animes.endCursor;
-    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction});
+    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction});
     const { loadMore } = useItemsHandler({
         cursorRef,
         queries: {

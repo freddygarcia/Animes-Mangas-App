@@ -3,7 +3,7 @@ import { Button, Divider, Icon, Text, useStyleSheet } from "@ui-kitten/component
 import { GestureResponderEvent, Image, Linking, ScrollView, StyleSheet, View } from "react-native";
 import { RouteProp } from '@react-navigation/native'
 import { Anime } from '../../../models/anime.model';
-import usetoogleBookmark from '../../../hooks/toogle-bookmark.hook';
+import usetoggleBookmark from '../../../hooks/toggle-bookmark.hook';
 import { saveAnime as bookmarkAction, deleteAnime as unbookmarkAction } from '../../../reducers/bookmark.reducer';
 import Loading from '../../../components/Loading';
 import CategoryList from '../../../components/details/CategoryList';
@@ -19,11 +19,11 @@ const AnimeBookmarkScreen = ({ route }: AnimeScreenProps) => {
 
     const [anime, setAnime] = useState(route.params.item);
     const styles = useStyleSheet(themedStyles);
-    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction });
+    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction });
 
     const openYoutubeLink = (anime: Anime) => (ev: GestureResponderEvent) => Linking.openURL(anime.trailer as string);
 
-    const toogleBookmark = (anime: Anime) => {
+    const toggleBookmark = (anime: Anime) => {
         bookmark(anime);
         setAnime(anime => new Anime({ ...anime, isBookmarked: !anime.isBookmarked }))
     }
@@ -78,7 +78,7 @@ const AnimeBookmarkScreen = ({ route }: AnimeScreenProps) => {
 
                 <BookmarkButton
                     status='basic'
-                    onBookmarkSave={toogleBookmark}
+                    onBookmarkSave={toggleBookmark}
                     item={anime}
                 />
             </View>

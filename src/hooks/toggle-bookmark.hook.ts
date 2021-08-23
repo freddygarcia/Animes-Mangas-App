@@ -7,13 +7,13 @@ interface useBookmarkProps {
     unbookmarkAction: Function
 }
 
-const usetoogleBookmark = (props: useBookmarkProps) => {
+const usetoggleBookmark = (props: useBookmarkProps) => {
     const dispatch = useDispatch();
     
     const bookmark = (serie: Serie) => dispatch(props.bookmarkAction(serie));
     const unbookmark = (id: string) => dispatch(props.unbookmarkAction(id));
     
-    const toogleBookmark = (serie: Serie) => {
+    const toggleBookmark = (serie: Serie) => {
         if (serie.isBookmarked) {
             unbookmark(serie.id);
         } else {
@@ -21,7 +21,7 @@ const usetoogleBookmark = (props: useBookmarkProps) => {
         }
     }
 
-    return toogleBookmark;
+    return toggleBookmark;
 }
 
-export default usetoogleBookmark;
+export default usetoggleBookmark;

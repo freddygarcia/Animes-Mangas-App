@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Divider, Icon, Text, useStyleSheet } from "@ui-kitten/components";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { RouteProp } from '@react-navigation/native'
-import usetoogleBookmark from '../../../hooks/toogle-bookmark.hook';
+import usetoggleBookmark from '../../../hooks/toggle-bookmark.hook';
 import { saveManga as bookmarkAction, deleteManga as unbookmarkAction } from '../../../reducers/bookmark.reducer';
 import Loading from '../../../components/Loading';
 import CategoryList from '../../../components/details/CategoryList';
@@ -19,9 +19,9 @@ const MangaBookmarkScreen = ({ route }: MangaScreenProps) => {
 
     const [manga, setManga] = useState(route.params.item);
     const styles = useStyleSheet(themedStyles);
-    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction });
+    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction });
 
-    const toogleBookmark = (manga: Manga) => {
+    const toggleBookmark = (manga: Manga) => {
         bookmark(manga);
         setManga(manga => new Manga({ ...manga, isBookmarked: !manga.isBookmarked }))
     }
@@ -79,7 +79,7 @@ const MangaBookmarkScreen = ({ route }: MangaScreenProps) => {
 
                 <BookmarkButton
                     status='basic'
-                    onBookmarkSave={toogleBookmark}
+                    onBookmarkSave={toggleBookmark}
                     item={manga}
                 />
             </View>

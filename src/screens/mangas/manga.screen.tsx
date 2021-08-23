@@ -8,7 +8,7 @@ import RateBar from '../../components/details/RateBar';
 import CategoryList from '../../components/details/CategoryList';
 import DetailsList from '../../components/details/DetailsList';
 import { deleteManga as unbookmarkAction, saveManga as bookmarkAction } from '../../reducers/bookmark.reducer';
-import usetoogleBookmark from '../../hooks/toogle-bookmark.hook';
+import usetoggleBookmark from '../../hooks/toggle-bookmark.hook';
 import BookmarkButton from '../../components/details/BookmarkButton';
 
 interface MangaScreenProps {
@@ -21,9 +21,9 @@ const MangaScreen = ({ route }: MangaScreenProps) => {
 
     const [manga, setManga] = useState(route.params.item);
     const styles = useStyleSheet(themedStyles);
-    const bookmark = usetoogleBookmark({ bookmarkAction, unbookmarkAction });
+    const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction });
 
-    const toogleBookmark = (manga: Manga) => {
+    const toggleBookmark = (manga: Manga) => {
         bookmark(manga);
         setManga(manga => new Manga({ ...manga, isBookmarked: !manga.isBookmarked }))
     }
@@ -81,7 +81,7 @@ const MangaScreen = ({ route }: MangaScreenProps) => {
 
                 <BookmarkButton
                     status='basic'
-                    onBookmarkSave={toogleBookmark}
+                    onBookmarkSave={toggleBookmark}
                     item={manga}
                 />
             </View>
