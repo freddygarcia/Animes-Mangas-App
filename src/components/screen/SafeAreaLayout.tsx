@@ -1,17 +1,17 @@
 import React from 'react';
-import { Layout } from "@ui-kitten/components";
+import { Layout, LayoutProps } from "@ui-kitten/components";
 
-interface ScreenProps {
+interface ScreenProps extends LayoutProps {
     children: React.ReactNode
 }
 
-const Screen = ({ children }: ScreenProps) => {
+const SafeAreaLayout = (props: ScreenProps) => {
 
     return (
-        <Layout style={{ flex: 1 }}>
-            {children}
+        <Layout style={[props.style, { flex: 1 }]}>
+            {props.children}
         </Layout>
     )
 }
 
-export default Screen;
+export default SafeAreaLayout;

@@ -4,12 +4,12 @@ import { Animated, StyleSheet } from "react-native";
 import { connect, useDispatch } from "react-redux";
 import { RootState } from "../../app/store";
 import { SearchState, enable, hide, update } from "../../reducers/search.reducer";
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 
 interface TopNavigationSearchProps {
     title: string
     state: SearchState
-    navigation: NativeStackNavigationProp<{}>;
+    navigation: DrawerNavigationProp<{}>;
 };
 
 const TopNavigationSearch = (props: TopNavigationSearchProps) => {
