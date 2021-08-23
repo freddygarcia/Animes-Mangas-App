@@ -17,7 +17,7 @@ export interface useQueryResult {
     loading: boolean
 }
 
-export const useQuery = (props: useQueryProps): useQueryResult => {
+export const useApiSearch = (props: useQueryProps): useQueryResult => {
 
     const search = useSelector<RootState>(state => state.search) as SearchState;
     const [query, setQuery] = useState<any>(props.defaultQuery);

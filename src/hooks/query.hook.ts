@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { NUM_OF_ITEMS_TO_RETRIEVE } from "../app/contants";
 import { RootState } from "../app/store";
 import { cancelLoadMore as cancelLoadMore_, hide, loadMore as loadMore_, SearchState } from "../reducers/search.reducer";
-import { useQuery, useQueryResult } from "./api.hook";
+import { useApiSearch, useQueryResult } from "./api-search.hook";
 
 interface ItemsProps {
     cursorRef: string | null
@@ -17,7 +17,7 @@ interface ItemsProps {
     }
 }
 
-export const useItemsHandler = (props: ItemsProps) => {
+export const useQueryHandler = (props: ItemsProps) => {
 
     const dispatch = useDispatch();
     const search = useSelector<RootState>(state => state.search) as SearchState;
@@ -28,7 +28,7 @@ export const useItemsHandler = (props: ItemsProps) => {
         title: search.criteria
     }
 
-    const query = useQuery({
+    const query = useApiSearch({
         defaultQuery: props.queries.defaultQuery,
         queryOnSearch: props.queries.queryOnSearch,
         variables: filters

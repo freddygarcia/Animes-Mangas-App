@@ -5,7 +5,7 @@ import { List } from '@ui-kitten/components';
 
 import { RootState } from '../../app/store';
 import { GetAllAnimes as defaultQuery, GetAnimesByTitle as queryOnSearch } from '../../api/animes';
-import { useItemsHandler } from '../../hooks/items.hook';
+import { useQueryHandler } from '../../hooks/query.hook';
 import ListItem from '../../components/screen/ListItem';
 import { Anime } from '../../models/anime.model';
 import { AnimeState, append, save } from '../../reducers/anime.reducer';
@@ -26,7 +26,7 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
     const cursorRef = state.endCursor;
     const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction });
     const netInfo = useNetInfo();
-    const { search, loadMore } = useItemsHandler({
+    const { search, loadMore } = useQueryHandler({
         cursorRef,
         queries: {
             defaultQuery, queryOnSearch

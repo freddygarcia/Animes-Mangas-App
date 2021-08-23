@@ -5,7 +5,7 @@ import { List } from '@ui-kitten/components';
 
 import { RootState } from '../../app/store';
 import { GetAllMangas as defaultQuery, GetMangasByTitle as queryOnSearch } from '../../api/mangas';
-import { useItemsHandler } from '../../hooks/items.hook';
+import { useQueryHandler } from '../../hooks/query.hook';
 import ListItem from '../../components/screen/ListItem';
 import { Manga } from '../../models/manga.model';
 import { save, append, MangaState } from '../../reducers/manga.reducer';
@@ -25,7 +25,7 @@ const MangasScreen = ({ navigation, state }: MangasScreenProps) => {
     const cursorRef = state.endCursor;
     const bookmark = usetoggleBookmark({ bookmarkAction, unbookmarkAction});
     const netInfo = useNetInfo();
-    const { search, loadMore } = useItemsHandler({
+    const { search, loadMore } = useQueryHandler({
         cursorRef,
         queries: {
             defaultQuery, queryOnSearch
