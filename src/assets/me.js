@@ -18,4 +18,12 @@ export default Me = {
         { icon: require('./hobbies/physics.png'), title: 'Physics' },
         { icon: require('./hobbies/coding.png'), title: 'Coding' },
     ],
+    studies : [
+        { icon: require('./colleges/unapec.png'), year: 2020, url : 'https://unapec.edu.do/' },
+        { icon: require('./colleges/itla.png'), year: 2014, url : 'https://itla.edu.do/' }
+    ],
+    workedPlaces : [
+        { icon: require('./colleges/unapec.png'), year: 2020, url : 'https://unapec.edu.do/' },
+        { icon: require('./colleges/itla.png'), year: 2014, url : 'https://itla.edu.do/' }
+    ]
 }

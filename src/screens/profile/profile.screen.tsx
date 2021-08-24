@@ -38,8 +38,8 @@ const ProfileScreen = () => {
 
     const renderHobbieItem = (info: ListRenderItemInfo<{ icon: any, title: string }>): React.ReactElement => {
         return (
-            <View style={{ flex: 1, marginVertical: 20 }}>
-                <TouchableHighlight onPress={openSite} style={styles.hobbieTouch}  underlayColor={'#eee'}>
+            <View>
+                <TouchableHighlight onPress={openSite} style={styles.collegeTouch} underlayColor={'#eee'}>
                     <ImageBackground
                         style={styles.hobbieItem}
                         key={info.index}
@@ -65,6 +65,25 @@ const ProfileScreen = () => {
             </View>
         )
     };
+
+    const renderCollegeItem = (info: ListRenderItemInfo<{ icon: any, year: number, url: string }>): React.ReactElement => {
+        return (
+            <View key={info.index} style={{ alignItems: 'center' }}>
+                <TouchableHighlight onPress={() => Linking.openURL(info.item.url)} style={styles.hobbieTouch} underlayColor={'#eee'}>
+                    <ImageBackground
+                        style={styles.collegeItem}
+                        key={info.index}
+                        source={info.item.icon}
+                    />
+                </TouchableHighlight>
+                <Text
+                    style={styles.stackName}
+                    category='c2'>
+                    {info.item.year}
+                </Text>
+            </View>)
+    }
+
 
 
     return (
@@ -97,9 +116,9 @@ const ProfileScreen = () => {
                     />
                     <Details
                         style={styles.personalInfo}
-                        onPress={() => Linking.openURL('https://unapec.edu.do/')}
-                        hint='Alma mater'
-                        value={'UNAPEC'}
+                        onPress={() => Linking.openURL('https://itla.edu.do/')}
+                        hint='a balance'
+                        value={'Life is'}
                     />
                     <Details
                         style={styles.personalInfo}
@@ -118,9 +137,22 @@ const ProfileScreen = () => {
             </Text>
             <List
                 contentContainerStyle={styles.stackList}
+                style={styles.baseList}
                 horizontal={true}
                 data={Me.stack}
                 renderItem={renderStackItem}
+            />
+            <Text
+                style={styles.section}
+                category='s1'>
+                Colleges
+            </Text>
+            <List
+                data={Me.studies}
+                horizontal={true}
+                style={styles.baseList}
+                contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                renderItem={renderCollegeItem}
             />
             <Text
                 style={styles.section}
@@ -129,7 +161,8 @@ const ProfileScreen = () => {
             </Text>
             <List
                 data={Me.hobbies}
-                contentContainerStyle={{ justifyContent: 'center' }}
+                style={[styles.baseList, { marginBottom : 30 }]}
+                contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
                 numColumns={3}
                 renderItem={renderHobbieItem}
             />
@@ -146,6 +179,9 @@ const styles = StyleSheet.create({
     header: {
         paddingVertical: 24,
         alignItems: 'center',
+    },
+    baseList: {
+        backgroundColor: 'white'
     },
     profileAvatar: {
         width: 124,
@@ -172,7 +208,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     section: {
-        marginTop: 24,
+        marginTop: 34,
         marginBottom: 20,
         marginHorizontal: 16,
     },
@@ -184,9 +220,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 8,
     },
-    hobbieTouch : {
-        borderRadius : 100
-
+    hobbieTouch: {
+        borderRadius: 100
+    },
+    collegeItem: {
+        width: 160,
+        marginHorizontal: 10,
+        height: 40
     },
     stackTouch: {
         borderRadius: 100,
@@ -195,7 +235,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    collegeTouch: {
 
+    },
     stackName: {
         marginTop: 8,
     },
