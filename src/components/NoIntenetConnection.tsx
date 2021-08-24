@@ -13,7 +13,7 @@ const NoInternetConnection = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F6FCFF',
+        backgroundColor: '#E2E1E0',
         justifyContent: 'center',
         alignItems: 'center'
     },
