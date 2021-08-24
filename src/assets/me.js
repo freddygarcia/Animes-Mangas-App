@@ -1,7 +1,7 @@
 export default Me = {
     name: 'Freddy García Abreu',
     ocuppation: 'Software Engineer',
-    telegram : '@Fredd13r',
+    telegram : 'Fredd13r',
     site: 'https://freddy-garcia-abreu.herokuapp.com/',
     age: 25,
     stack: [

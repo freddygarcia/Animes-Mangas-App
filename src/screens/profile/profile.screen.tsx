@@ -122,7 +122,7 @@ const ProfileScreen = () => {
                     />
                     <Details
                         style={styles.personalInfo}
-                        onPress={() => Linking.openURL('tg://resolve?domain=' + me.telegram)}
+                        onPress={() => Linking.openURL('tg://resolve?domain=' + Me.telegram)}
                         hint='Telegram'
                         value={Me.telegram}
                     />
