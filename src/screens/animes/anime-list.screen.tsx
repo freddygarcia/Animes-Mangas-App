@@ -47,7 +47,7 @@ const AnimesScreen = ({ navigation, state }: AnimesScreenProps) => {
 
     if (search.searching && query.data && query.data.rows.nodes.length === 0) return <NothingToDisplay />
 
-    if (query.loading) return <Loading />
+    if (query.loading && search.searching) return <Loading />
 
     return (
         <List
