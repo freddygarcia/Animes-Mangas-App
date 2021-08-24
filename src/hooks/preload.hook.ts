@@ -10,6 +10,7 @@ import { append as saveAnime } from "../reducers/anime.reducer";
 import { save as saveManga } from "../reducers/manga.reducer";
 import RNBootSplash from "react-native-bootsplash";
 import { GetAllMangas } from "../api/mangas";
+import { useNetInfo } from "@react-native-community/netinfo";
 
 const usePreload = () => {
 
@@ -18,11 +19,17 @@ const usePreload = () => {
     }
 
     const dispatch = useDispatch();
+    const netInfo = useNetInfo();
     const animeQuery = useQuery(GetAllAnimes, { variables });
     const mangaQuery = useQuery(GetAllMangas, { variables });
 
     const animes = useSelector<RootState>(state => state.animes.animes) as Anime[];
     const mangas = useSelector<RootState>(state => state.mangas.mangas) as Manga[];
+
+    useEffect(() => {
+        if (!netInfo.isInternetReachable)
+            RNBootSplash.hide({ fade: true });
+    }, [])
 
     useEffect(() => {
         if (!animeQuery.loading && animeQuery.data && animes.length == 0) {
@@ -40,6 +47,8 @@ const usePreload = () => {
             RNBootSplash.hide({ fade: true });
         }
     }, [animes, mangas]);
+
+    console.log(animeQuery.loading)
 
     return {
         animes,
