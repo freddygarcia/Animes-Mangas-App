@@ -32,10 +32,6 @@ const MangaBookmarkScreen = ({ route }: MangaScreenProps) => {
         <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}>
-            <Image
-                style={styles.primaryImage}
-                source={{ uri: manga.poster }}
-            />
             <Text
                 style={styles.titleLabel}
                 category='h6'>
