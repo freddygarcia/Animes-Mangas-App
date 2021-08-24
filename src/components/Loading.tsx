@@ -6,6 +6,8 @@ const Loading = () => {
     return (
         <View style={styles.container}>
             <SkeletonContent containerStyle={styles.skeletonContent}
+                highlightColor={'#e4eff7'}
+                boneColor='#ccd6db'
                 isLoading={true}>
                 <View style={styles.item} />
                 <View style={styles.item} />
