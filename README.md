@@ -42,6 +42,12 @@ The app latest APK is located at `<project_root>/APK/`
 - [Redux Persit](https://github.com/rt2zz/redux-persist)
 - [Skeleton](https://github.com/alexZajac/react-native-skeleton-content-nonexpo)
 
+
+## Demostration
+
+
+https://user-images.githubusercontent.com/86239067/130846840-df796e0e-17da-4b9e-ae0d-71012ccca179.mp4
+
 ## Icons provided by
 
 - <a href="https://iconscout.com/icons/python" target="_blank">Python Icon</a> by <a href="https://iconscout.com/contributors/icon-54">Icon 54</a> on <a href="https://iconscout.com">Iconscout</a>
